@@ -12,6 +12,8 @@
 \RequirePackage[utf8]{inputenc} % UTF8 support
 \RequirePackage[T1]{fontenc} % Modern fonts
 
+
+
 % Useful tools
 \RequirePackage{xkeyval} % DeclareOption but with key-value syntax
 \RequirePackage{xstring} % String manipulation
@@ -20,6 +22,12 @@
 \RequirePackage[table,svgnames]{xcolor} % Color presets
 \RequirePackage{l3regex} % Regular expressions
 \RequirePackage{xspace} % Macros that preserve spacing
+
+% Include "article.cls"; fontsize option must be processed early
+\DeclareOptionX<early>{fontsize}{ \PassOptionsToClass{#1}{article} }
+\presetkeys{early}{fontsize=12pt}{}
+\ProcessOptionsX<early>
+\LoadClass[fleqn]{article}
 
 % Math, symbols, etc.
 \RequirePackage{amssymb} % Useful symbols
@@ -32,22 +40,16 @@
 \RequirePackage[mathscr]{eucal} % Use \mathscr for fancy script text
 
 % Typography
+\RequirePackage[tiny, rigidchapters, bf, explicit, pagestyles]{titlesec}
 \RequirePackage[english]{babel} % Multilingual tools
-\AtEndOfClass{ % Must be loaded before "article"
-	\usepackage[autostyle, english=american,threshold=0]{csquotes}
-}
+\RequirePackage[autostyle, english=american,threshold=0]{csquotes} % Quotations
 \RequirePackage{ragged2e} % Non-justified text
 \RequirePackage{setspace} % Better line spacing
 \RequirePackage{soul} % Nice underlining
-\AtEndOfClass{ % Produces warning if loaded before "article"
-	\RequirePackage{relsize} % Relative text sizing
-}
-\AtEndOfClass{ % Breaks if loaded before "article"
-  \RequirePackage{titling}
-}
-\AtEndOfClass{ % Breaks if loaded before "article"
-	\RequirePackage[shortlabels]{enumitem} % Advanced lists
-}
+\RequirePackage{relsize} % Relative text sizing
+\RequirePackage{titling}
+\RequirePackage[shortlabels]{enumitem} % Advanced lists
+
 
 % Page layout
 \RequirePackage[letterpaper]{geometry} % Page margins
@@ -155,18 +157,18 @@
 
 % Page margins, header, footer
 % Page margins
-\AtEndOfClass{
+
 	\geometry{letterpaper,headheight=0pt,headsep=0in,margin=1in,includehead,includefoot}
-}
-\DeclareOptionX{smallmargins}{\AtEndOfClass{
+
+\DeclareOptionX{smallmargins}{
   \geometry{margin=0.5in,includehead,includefoot}
-}}
+}
 
-\DeclareOptionX{tinymargins}{\AtEndOfClass{
+\DeclareOptionX{tinymargins}{
   \geometry{margin=0.3in,includehead,includefoot}
-}}
+}
 
-\DeclareOptionX{smallheader}{\AtEndOfClass{
+\DeclareOptionX{smallheader}{
   \geometry{headheight=15pt,headsep=10pt}
   \newpagestyle{custom}{
   	\sethead{\mythetitle}{}{Jason Hansel}
@@ -175,7 +177,7 @@
   	\setfootrule{0.5pt}
   }
   \pagestyle{custom}
-}}
+}
 
 
 \DeclareOptionX{parindent}{\AtEndOfClass{
@@ -280,24 +282,16 @@
 	}
 }
 
-\DeclareOptionX{fontsize}{
-	\PassOptionsToClass{#1}{article}
-}
 
-% Set default options
-\presetkeys{hw.cls}{fontsize=12pt}{}
-
+% \ProcessOptionsX
 \ProcessOptionsX
 
-
-
-\LoadClass[fleqn, notitlepage]{article}
 
 \usepackage[parfill]{parskip}
 
 
 % Headings
-\usepackage[tiny, rigidchapters, bf, explicit, pagestyles]{titlesec}
+
 \titleformat{\part}[hang]{}{}{0pt}{\textbf{#1}}
 \titlelabel{}
 \titlespacing{\part}{0pt}{0pt}{0pt}
