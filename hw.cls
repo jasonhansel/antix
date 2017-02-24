@@ -19,6 +19,7 @@
 \RequirePackage{etoolbox} % Easier use of e-TeX extensions
 \RequirePackage[table,svgnames]{xcolor} % Color presets
 \RequirePackage{l3regex} % Regular expressions
+\RequirePackage{xspace} % Macros that preserve spacing
 
 % Math, symbols, etc.
 \RequirePackage{amssymb} % Useful symbols
@@ -28,15 +29,21 @@
 \RequirePackage{commath} % Math helpers
 \RequirePackage{bm} % Bold math
 \RequirePackage{units} % Annotate values with units
-\usepackage[mathscr]{eucal} % Use \mathscr for fancy script text
+\RequirePackage[mathscr]{eucal} % Use \mathscr for fancy script text
 
 % Typography
-\RequirePackage[english]{babel}
+\RequirePackage[english]{babel} % Multilingual tools
 \RequirePackage{ragged2e} % Non-justified text
-\RequirePackage{setspace}
-\RequirePackage{soul}
-\AtEndOfClass{ % Must load after "article" to avoid errors
+\RequirePackage{setspace} % Better line spacing
+\RequirePackage{soul} % Nice underlining
+\AtEndOfClass{ % Produces warning if loaded before "article"
+	\RequirePackage{relsize} % Relative text sizing
+}
+\AtEndOfClass{ % Breaks if loaded before "article"
   \RequirePackage{titling}
+}
+\AtEndOfClass{ % Breaks if loaded before "article"
+	\RequirePackage[shortlabels]{enumitem} % Advanced lists
 }
 
 % Page layout
@@ -46,66 +53,32 @@
 \RequirePackage{parcolumns} % Parallel columns
 
 % Boxes and frames
-\RequirePackage{tcolorbox}
-\RequirePackage{adjustbox}
-\RequirePackage{framed}
+\RequirePackage{tcolorbox} % Colorful boxes
+\RequirePackage{adjustbox} % Transform text boxes
+\RequirePackage{framed} % Better framed/shaded regions
 
 % Graphics
 \RequirePackage{tikz} % General diagrams and pictures
-% \RequirePackage{fitch}
-\RequirePackage{pgf}
-\RequirePackage{pgfpages}
+\RequirePackage{pgfpages} % TikZ page manipulation, can break hyperlinks
 \RequirePackage{prooftrees} % Truth trees
 \RequirePackage{forest} % Trees
 
-
-
-
 % Verbatim mode tools
-% \RequirePackage{moreverb}
-% \RequirePackage{shortvrb}
 \RequirePackage{alltt} % Like "verbatim" but with commands enabled
-\RequirePackage{fancyvrb}
-\RequirePackage{upquote}
+\RequirePackage{fancyvrb} % Enhanced "verbatim" modes
+\RequirePackage{upquote} % Normal single/double quotes in 
 
 
 % Tables
-\RequirePackage{tabu} % Note: http://tex.stackexchange.com/questions/87144/ on verbatim and tabu
-\RequirePackage{array}
-\RequirePackage{multirow}
-\RequirePackage[thinlines]{easytable}
-\RequirePackage{makecell}
+\RequirePackage{tabu} % Advanced table-related features
+\RequirePackage{multirow} % Easy multi-row cells
+\RequirePackage[thinlines]{easytable} % Misc. table shortcuts
+\RequirePackage{makecell} % Table cell customization
 
 
 
 
-\RequirePackage{xspace}
-
-\xspaceaddexceptions{"}
-
-
-
-
-% Ignore some amsmath warnings
-\makeatletter
-\let\over\@@over
-\let\atopwithdelims\@@atopwithdelims
-\makeatother
-
-% Settings
-\delimiterfactor=800
-\delimitershortfall=3pt
-
-
-% TikZ
-\usetikzlibrary{positioning, matrix, arrows.meta, backgrounds, shapes.multipart,chains, calc}
-\tikzset{dot/.style={circle, fill=black}}
-\tikzset{cell/.style={minimum size=0.5cm, draw=black, line width=1pt,
- text height=0.25cm,text width=0.25cm,text centered}}{}
-
-% Math commands
-\renewcommand{\exp}[1]{\ensuremath{e^{#1}}}
-\renewcommand{\P}[1]{\mathrm{P}(\kern-0.5pt#1)}
+\RequirePackage{antix-settings}
 
 
 % A box with a horizontal rule at the bottom.
@@ -125,10 +98,8 @@
 \def\restar{\catcode`\*=13}
 \newenvironment{fixstar}{\catcode`*=12}{}
 
-
-\usepackage{shortcuts}
-
-\usepackage{shortcuts-text}
+\RequirePackage{shortcuts}
+\RequirePackage{shortcuts-text}
 
 \newcommand{\eof}{\end{document}}
 
@@ -366,9 +337,7 @@
 \usepackage[autostyle, english=american]{csquotes}
 \MakeOuterQuote{"}
 
-\usepackage[shortlabels]{enumitem}
-\setlist{topsep=0pt,parsep=2ex,itemsep=0pt}
-\setlist[itemize]{label=$\bullet$}
+
 \newlength{\msize}
 \setlength{\msize}{30pt}
 \newcommand{\mathitem}[1]{
@@ -379,7 +348,6 @@
 }
 
 
-\usepackage{relsize}
 
 
 

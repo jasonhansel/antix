@@ -1,0 +1,40 @@
+% Load various TikZ libraries
+\usetikzlibrary{
+	positioning,
+	matrix,
+	arrows.meta,
+	backgrounds,
+	shapes.multipart,
+	chains,
+	calc
+}
+
+% Stop xspace from adding space before quotation marks.
+% This fixes, eg, "\thm", but breaks \thm "ABC"
+\xspaceaddexceptions{"}
+
+
+% Ignore some amsmath warnings
+\makeatletter
+\let\over\@@over
+\let\atopwithdelims\@@atopwithdelims
+\makeatother
+
+% Change fancyvrb tab size to 4
+\RecustomVerbatimEnvironment{Verbatim}{Verbatim}{tabsize=4}
+
+% Make delimiters stretch less
+\delimiterfactor=800
+\delimitershortfall=3pt
+
+
+% Useful TikZ styles
+\tikzset{dot/.style={circle, fill=black}}
+\tikzset{cell/.style={minimum size=0.5cm, draw=black, line width=1pt,
+ text height=0.25cm,text width=0.25cm,text centered}}{}
+
+
+\AtBeginDocument{ % Since enumitme must be loaded late
+	\setlist{topsep=0pt,parsep=2ex,itemsep=0pt}
+	\setlist[itemize]{label=$\bullet$}
+}
