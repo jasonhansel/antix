@@ -1,0 +1,180 @@
+
+% MATH SHORTCUTS
+
+% (In)equalities
+\newcommand{\gte}{\geq}
+\newcommand{\lte}{\leq}
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+\renewcommand{\ne}{\neq}
+\newcommand{\abt}{\approx}
+
+% Sets
+\newcommand{\nin}{\notin}
+\newcommand{\unin}{\cup}
+\newcommand{\isec}{\cap}
+\newcommand{\slte}{\subseteq}
+\newcommand{\nslte}{\nsubseteq}
+\newcommand{\slt}{\subset}
+\newcommand{\sset}{\subseteq}
+\newcommand{\sz}{\abs}
+\newcommand{\except}{\setminus}
+\newcommand{\mt}{\varnothing}
+
+% Logic
+\let\oldOr\lor
+\renewcommand{\And}{\land}
+\newcommand{\Or}{\oldOr}
+\newcommand{\Not}{\lnot}
+\newcommand{\Iff}{\leftrightarrow}
+\newcommand{\If}[1]{#1 \to}
+\newcommand{\Ifp}[1]{(#1)\to}
+\newcommand{\infer}{\vdash}
+\newcommand{\proves}{\vdash}
+\newcommand{\entails}{\vDash}
+\newcommand{\from}[1]{#1\to}
+
+% Isomorphism, congruence, groups
+\newcommand{\iso}{\cong}
+\newcommand{\niso}{\not{\iso}}
+\newcommand{\nsg}{\triangleleft}
+\newcommand{\con}{\mathrel{\equiv}}
+\newcommand{\ncon}{\not\equiv}
+\newcommand{\adjoin}[1]{\lbrack#1\rbrack}
+
+
+% Greek leters
+\newcommand{\alp}{\ensuremath{\alpha}}
+\AtBeginDocument{
+	% Not just "AtEndOfClass" because it conflicts with "times new roman"
+	\renewcommand{\^}{\lambda}
+	\renewcommand{\l}{\lambda}
+}
+\newcommand{\fee}{\ensuremath{\varphi}\xspace}
+\AtBeginDocument{
+	\let\oldphi\phi
+	\renewcommand{\phi}[1][]{\ifthenelse{\equal{#1}{}}{\oldphi}{\oldphi(#1)}}
+}
+
+
+
+
+% Functions
+\newcommand{\pose}{\circ}
+\newcommand{\fin}{f^{-1}}
+\newcommand{\fbar}{\overline{f}}
+
+% Font choice
+\newcommand{\tt}{\texttt}
+\newcommand{\ur}{\mathrm}
+
+
+% "Curly" (in)equality symbols
+\newcommand{\crlt}{\prec}
+\newcommand{\crgt}{\succ}
+\newcommand{\creq}{\asymp}
+
+% Common superscripts
+\newcommand{\1}{^{-1}}
+\newcommand{\2}{^{-2}}
+\newcommand{\T}{^{\displaystyle t}} % Transposition of a matrix
+
+% Common "roman" text in math formulae
+\newcommand{\is}{\textrm{ is }\xspace}
+\newcommand{\isnt}{\textrm{ is not }\xspace}
+
+% Common "cursive" letters, some with subscripts as arguments
+\AtBeginDocument{
+    \renewcommand{\vee}{\ensuremath{\mathcal{V}}\xspace}
+}
+\newcommand{\vi}{\textrm{V}_\mathscr{I} }
+\newcommand{\ee}{\ensuremath{\mathcal{E}}\xspace}
+\newcommand{\el}{\ensuremath{\mathcal{L}}\xspace}
+\newcommand{\ayy}{\ci{A}\xspace}
+\newcommand{\ess}{\ensuremath{\mathcal{S}}\xspace}
+\newcommand{\ef}{\ensuremath{\mathcal{F}}\xspace}
+\newcommand{\kay}[1][]{\ensuremath{\ifthenelse{\equal{#1}{}}{\mathcal{K}}{\mathcal{K}_{#1}}}}
+\newcommand{\gee}[1][]{\ensuremath{\ifthenelse{\equal{#1}{}}{\mathcal{G}}{\mathcal{G}_{#1}}}}
+
+% Computer science
+\newcommand{\subtype}{\mathbin{<:}}
+\newcommand{\Oh}[1]{\mathcal{O}\left(#1\right)}
+
+% Misc common symbols
+\newcommand{\G}{\Gamma}
+\newcommand{\tri}{\triangle}
+\newcommand{\ox}{\otimes}
+\newcommand{\x}{\times}
+\newcommand{\op}{\ensuremath{\oplus}\xspace} % "Outer" product
+\newcommand{\ip}{\ensuremath{\times}\xspace} % "Inner" product
+\newcommand{\eqdf}{\coloneqq}
+\newcommand{\vh}{\ensuremath{\hat{V}}\xspace}
+\newcommand{\bz}{\bm{0}}
+\newcommand{\chk}{\ensuremath{\checkmark}}
+\renewcommand{\tilde}{\ensuremath{\raise.18ex\hbox{$\scriptstyle\sim$}}}
+
+% Various uses of vertical bars
+\newcommand{\given}{\mid}
+\newcommand{\where}{\mid}
+\newcommand{\ndiv}{\nmid}
+
+
+% Ellipsis
+\newcommand{\etc}{\ensuremath{\cdots}\xspace}
+\newcommand{\letc}{\;\etc\;}
+\newcommand{\etco}[1]{#1\etc#1}
+
+% Brackets, braces, etc.
+\newcommand{\<}[1]{\langle#1\rangle}
+\newcommand{\bpar}[1]{\bm{(} #1 \bm{)}}
+\newcommand{\parr}[1]{\left( #1 \right)}
+
+
+% Fractions and radicals
+\newcommand{\rt}{\sqrt}
+\AtBeginDocument{
+	\renewcommand{\sf}{\nicefrac}
+	\newcommand{\half}{\sf{1}{2}\:}
+	\newcommand{\halve}[1]{\sf{#1}{2}}
+	\newcommand{\ofpi}[2]{\nicefrac{#1}{#2}\pi}
+}
+
+
+% amsmath delimiters and operators
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\area}{area}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\orb}{orb}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\Char}{char}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator{\rng}{rng}
+
+% Division
+\let\iover\div
+\newcommand{\inlinediv}{\mathbin{\iover}\,}
+\renewcommand{\div}{\mathbin{\mid}}
+
+% Text styles
+\newcommand{\lin}{\overline}
+\newcommand{\ci}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\mathsc}[1]{\text{\normalfont\scshape#1}}
+	% Above from http://tex.stackexchange.com/questions/13040/small-caps-for-the-math-mode
+
+
+% Common sets of numbers
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+
+% Inverses and reciprocals
+\newcommand{\inv}[1]{\ensuremath{\frac{1}{#1}}}
+\newcommand{\sinv}[1]{\ensuremath{\sf{1}{#1}}}
+\newcommand{\gin}[1]{\ensuremath{#1^{-1}}}

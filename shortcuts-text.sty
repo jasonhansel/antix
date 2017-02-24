@@ -1,0 +1,31 @@
+
+% Common pieces of text
+\newcommand{\dst}[1][]{distinct\xspace}
+\newcommand{\htn}[1][]{Hamiltonian\xspace}
+\newcommand{\qed}[1][]{QED.\xspace}
+\newcommand{\alg}[1][]{algorithm\xspace}
+\renewcommand{\st}{such that\xspace}
+\newcommand{\thm}[1][]{theorem\xspace}
+\newcommand{\Thm}[1][]{Theorem\xspace}
+
+% Text mode symbols
+\newcommand{\tetc}{\textellipsis}
+
+% Text formatting
+\renewcommand{\b}{\textbf}
+\newcommand{\boldcompact}[1]{\fontseries{b}\selectfont #1}
+\renewcommand{\i}{\textit}
+\newcommand{\hi}{\hangindent=0.7cm}
+\newcommand{\sub}{\textsubscript}
+\renewcommand{\u}{\ul}
+\newcommand{\sc}{\textsc}
+\def\hh{\subsection*}
+
+% Horizontal Rules
+\newcommand{\thr}{\medskip\hrule} % Space before only
+\newcommand{\hr}{\par\vspace{5pt}\hrule\vspace{5pt}\par} % Page-wide
+\newcommand{\chr}{\par\vspace{-0.5\baselineskip}\hspace{-0.5\columnsep}\rule{\linewidth + \columnsep}{.5pt}\\}  % Column-wide
+
+% Misc symbols (also for use in math mode)
+\newcommand{\by}{\ensuremath{\cdot}\xspace}
+\newcommand{\bby}{\ensuremath{\textrm{\textbullet}}\xspace}

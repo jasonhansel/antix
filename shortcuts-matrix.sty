@@ -1,0 +1,42 @@
+
+\newcommand{\mx}[1]{
+	\begin{pmatrix}
+		#1
+	\end{pmatrix}
+}
+\newcommand{\bmx}[1]{
+  \begin{bmatrix}
+    #1
+  \end{bmatrix}
+}
+\newcommand{\detmx}[1]{
+\left|
+  \begin{matrix}
+    #1
+  \end{matrix}
+\right|
+}
+
+
+\newcommand{\smx}[1]{
+	(
+	\hskip-2pt
+	\begin{smallmatrix}
+		#1
+	\end{smallmatrix}
+	\hskip-2pt
+	)
+}
+
+
+% Matrixpunc doesn't do commas, which might have other uses
+\newcommand{\matrixpunc}[1]{%
+	\mathcode`\;="8000
+	\begingroup
+		\lccode`~=`;
+		\lowercase{\endgroup \def~{\\} }
+	#1
+	\mathcode`\;="603B
+}
+\newcommand{\pt}[1]{\smx{\matrixpunc{#1}}}
+\newcommand{\dpt}[1]{\mx{\matrixpunc{#1}}}
