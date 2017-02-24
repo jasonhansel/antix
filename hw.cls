@@ -49,7 +49,7 @@
 \RequirePackage{relsize} % Relative text sizing
 \RequirePackage{titling}
 \RequirePackage[shortlabels]{enumitem} % Advanced lists
-
+\RequirePackage[parfill]{parskip} % Paragraph indent/skip
 
 % Page layout
 \RequirePackage[letterpaper]{geometry} % Page margins
@@ -155,19 +155,13 @@
   \SetKwProg{Fn}{function}{ is}{end}
 }}
 
-% Page margins, header, footer
 % Page margins
-
-	\geometry{letterpaper,headheight=0pt,headsep=0in,margin=1in,includehead,includefoot}
-
-\DeclareOptionX{smallmargins}{
-  \geometry{margin=0.5in,includehead,includefoot}
+\geometry{letterpaper,headheight=0pt,headsep=0in,margin=1in,includehead,includefoot}
+\DeclareOptionX{margin}{
+	\geometry{margin=#1in,includehead,includefoot}
 }
 
-\DeclareOptionX{tinymargins}{
-  \geometry{margin=0.3in,includehead,includefoot}
-}
-
+% Header and footer
 \DeclareOptionX{smallheader}{
   \geometry{headheight=15pt,headsep=10pt}
   \newpagestyle{custom}{
@@ -180,24 +174,28 @@
 }
 
 
-\DeclareOptionX{parindent}{\AtEndOfClass{
-	\setlength{\parindent}{3em}
-	\setlength{\parskip}{0em}
-}}
-\DeclareOptionX{ragged}{\AtEndOfClass{
+\setlength{\parindent}{0em}
+
+\DeclareOptionX{ragged}{
 	\setlength{\RaggedRightParindent}{\parindent}
 	\RaggedRight
-}}
-\DeclareOptionX{nohyphen}{\AtEndOfClass{
-  % \tolerance 99999
-  % \emergencystretch=\maxdimen
-  \hyphenpenalty=10000
-	\exhyphenpenalty=10000
-}}
-\DeclareOptionX{noskip}{\AtEndOfClass{
-  \setlength{\parindent}{0em}
+}
+
+\DeclareOptionX{parindent}{
+	\setlength{\parindent}{3em}
 	\setlength{\parskip}{0em}
-}}
+}
+
+\DeclareOptionX{nohyphen}{
+	%  May need to set "emergencystretch" to avoid line-break issues
+	\hyphenpenalty=10000
+	\exhyphenpenalty=10000
+}
+
+\DeclareOptionX{noskip}{
+	\setlength{\parindent}{0em}
+	\setlength{\parskip}{0em}
+}
 
 
 
@@ -287,32 +285,12 @@
 \ProcessOptionsX
 
 
-\usepackage[parfill]{parskip}
 
 
-% Headings
-
-\titleformat{\part}[hang]{}{}{0pt}{\textbf{#1}}
-\titlelabel{}
-\titlespacing{\part}{0pt}{0pt}{0pt}
-\titlespacing{\chapter}{0pt}{0pt}{0pt}
-\titlespacing{\section}{0pt}{0pt}{0pt}
-\titlespacing{\subsection}{0pt}{0pt}{0pt}
-
-% Fix "thetitle" - see http://tex.stackexchange.com/questions/3988/
-\let\oldtitle\title
-\renewcommand{\title}[1]{\oldtitle{#1}\newcommand{\mythetitle}{#1}}
 
 
-% Fix chapters
-\titleclass{\chapter}{straight}[\part]
-\newcounter{chapter}
-\renewcommand{\thechapter}{}
-\renewcommand{\chaptertitlename}{}
-\titleformat{\chapter}[hang]{}{}{0pt}{\textbf{#1}}[]
 
 
-\setlength{\parindent}{0em}
 \renewcommand\cellalign{tl}
 \setul{.6ex}{.1ex}
 \setlength{\mathindent}{0pt}
