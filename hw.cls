@@ -33,6 +33,9 @@
 
 % Typography
 \RequirePackage[english]{babel} % Multilingual tools
+\AtEndOfClass{ % Must be loaded before "article"
+	\usepackage[autostyle, english=american,threshold=0]{csquotes}
+}
 \RequirePackage{ragged2e} % Non-justified text
 \RequirePackage{setspace} % Better line spacing
 \RequirePackage{soul} % Nice underlining
@@ -319,8 +322,9 @@
 \renewcommand\cellalign{tl}
 \setul{.6ex}{.1ex}
 \setlength{\mathindent}{0pt}
-\usepackage[autostyle, english=american]{csquotes}
-\MakeOuterQuote{"}
+\AtEndOfClass{ % Configure csquotes; csquotes loaded late
+	\MakeOuterQuote{"}
+}
 
 
 \newlength{\msize}
