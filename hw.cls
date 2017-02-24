@@ -35,6 +35,9 @@
 \RequirePackage{ragged2e} % Non-justified text
 \RequirePackage{setspace}
 \RequirePackage{soul}
+\AtEndOfClass{ % Must load after "article" to avoid errors
+  \RequirePackage{titling}
+}
 
 % Page layout
 \RequirePackage[letterpaper]{geometry} % Page margins
@@ -54,6 +57,7 @@
 \RequirePackage{pgfpages}
 \RequirePackage{prooftrees} % Truth trees
 \RequirePackage{forest} % Trees
+
 
 
 
@@ -184,6 +188,17 @@
 \DeclareOptionX{smallmargins}{\AtEndOfClass{
   \geometry{headheight=12pt,headsep=0in,margin=0.5in,includehead,includefoot}
   \resetheader
+}}
+\DeclareOptionX{smallheader}{\AtEndOfClass{
+  \geometry{headheight=15pt,headsep=10pt,margin=0.5in,includehead,includefoot}
+  \resetheader
+  \fancypagestyle{plain}
+  \fancyhf{}
+  \fancyhead[R]{Jason Hansel}
+  \fancyhead[L]{\thetitle}
+  \fancyfoot[R]{Page \thepage}
+  \renewcommand{\headrulewidth}{0.5pt}
+  \renewcommand{\footrulewidth}{0.5pt}
 }}
 \DeclareOptionX{tinymargins}{\AtEndOfClass{
   \geometry{headheight=12pt,headsep=0in,margin=0.3in,includehead,includefoot}
