@@ -48,7 +48,6 @@
 
 % Page layout
 \RequirePackage[letterpaper]{geometry} % Page margins
-\RequirePackage{fancyhdr} % Fancy headers and footers
 \RequirePackage{multicol} % Multi-column text
 \RequirePackage{parcolumns} % Parallel columns
 
@@ -127,7 +126,8 @@
 	\setstretch{#1}
 }}
 
-\ExecuteOptionsX{linespacing} % In case option is not included
+% Enable by default
+\presetkeys{hw.cls}{linespacing}{}
 
 
 
@@ -153,46 +153,26 @@
 % Page margins, header, footer
 % Page margins
 \AtEndOfClass{
-	\geometry{letterpaper,headheight=15pt,headsep=0in,margin=1in,includehead,includefoot}
- 	\resetheader
+	\geometry{letterpaper,headheight=0pt,headsep=0in,margin=1in,includehead,includefoot}
 }
 \DeclareOptionX{smallmargins}{\AtEndOfClass{
-  \geometry{headheight=12pt,headsep=0in,margin=0.5in,includehead,includefoot}
-  \resetheader
-}}
-\DeclareOptionX{smallheader}{\AtEndOfClass{
-  \geometry{headheight=15pt,headsep=10pt,margin=0.5in,includehead,includefoot}
-  \resetheader
-  \fancypagestyle{plain}
-  \fancyhf{}
-  \fancyhead[R]{Jason Hansel}
-  \fancyhead[L]{\thetitle}
-  \fancyfoot[R]{Page \thepage}
-  \renewcommand{\headrulewidth}{0.5pt}
-  \renewcommand{\footrulewidth}{0.5pt}
-}}
-\DeclareOptionX{tinymargins}{\AtEndOfClass{
-  \geometry{headheight=12pt,headsep=0in,margin=0.3in,includehead,includefoot}
-  \resetheader
-}}
-\makeatletter
-\newcommand{\resetheader}{
-  % Reset after geometry change
-  \fancy@setoffs
-}
- \makeatother
-\AtEndOfClass{
-  \pagestyle{fancy}
-  \fancyhf{}
-  \fancyhead[L]{Jason Hansel}
-  \fancyhead[R]{Page \thepage}
-  \renewcommand{\headrulewidth}{0pt}
-  \renewcommand{\footrulewidth}{0pt}
-}
-\DeclareOptionX{nohead}{\AtEndOfClass{
-	\fancyhf{}
+  \geometry{margin=0.5in,includehead,includefoot}
 }}
 
+\DeclareOptionX{tinymargins}{\AtEndOfClass{
+  \geometry{margin=0.3in,includehead,includefoot}
+}}
+
+\DeclareOptionX{smallheader}{\AtEndOfClass{
+  \geometry{headheight=15pt,headsep=10pt}
+  \newpagestyle{custom}{
+  	\sethead{\mythetitle}{}{Jason Hansel}
+  	\setfoot{}{}{Page \thepage}
+  	\setheadrule{0.5pt}
+  	\setfootrule{0.5pt}
+  }
+  \pagestyle{custom}
+}}
 
 
 \DeclareOptionX{parindent}{\AtEndOfClass{
@@ -308,19 +288,24 @@
 
 
 
-\LoadClass[fleqn]{article}
+\LoadClass[fleqn, notitlepage]{article}
 
 \usepackage[parfill]{parskip}
 
 
 % Headings
-\usepackage[tiny, rigidchapters, bf, explicit]{titlesec}
+\usepackage[tiny, rigidchapters, bf, explicit, pagestyles]{titlesec}
 \titleformat{\part}[hang]{}{}{0pt}{\textbf{#1}}
 \titlelabel{}
 \titlespacing{\part}{0pt}{0pt}{0pt}
 \titlespacing{\chapter}{0pt}{0pt}{0pt}
 \titlespacing{\section}{0pt}{0pt}{0pt}
 \titlespacing{\subsection}{0pt}{0pt}{0pt}
+
+% Fix "thetitle" - see http://tex.stackexchange.com/questions/3988/
+\let\oldtitle\title
+\renewcommand{\title}[1]{\oldtitle{#1}\newcommand{\mythetitle}{#1}}
+
 
 % Fix chapters
 \titleclass{\chapter}{straight}[\part]
