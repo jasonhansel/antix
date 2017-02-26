@@ -295,7 +295,6 @@
 
 
 \renewcommand\cellalign{tl}
-\setul{.6ex}{.1ex}
 \setlength{\mathindent}{0pt}
 \AtEndOfClass{ % Configure csquotes; csquotes loaded late
 	\MakeOuterQuote{"}
