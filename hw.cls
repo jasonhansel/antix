@@ -13,6 +13,9 @@
 \RequirePackage[T1]{fontenc} % Modern fonts
 
 
+% Prevent clash with timesnewroman
+\RequirePackage[full]{textcomp}
+
 
 % Useful tools
 \RequirePackage{xkeyval} % DeclareOption but with key-value syntax

@@ -1,35 +1,21 @@
+% Standard matrix
+\newcommand{\mx}[1]{ \begin{pmatrix} #1 \end{pmatrix} }
+% Matrix in square brackets
+\newcommand{\bmx}[1]{ \begin{bmatrix} #1 \end{bmatrix} }
+% Matrix in absolute-value signs
+\newcommand{\detmx}[1]{ \left| \begin{matrix} #1 \end{matrix} \right| }
 
-\newcommand{\mx}[1]{
-	\begin{pmatrix}
-		#1
-	\end{pmatrix}
-}
-\newcommand{\bmx}[1]{
-  \begin{bmatrix}
-    #1
-  \end{bmatrix}
-}
-\newcommand{\detmx}[1]{
-\left|
-  \begin{matrix}
-    #1
-  \end{matrix}
-\right|
-}
-
-
+% Small-size matrix
 \newcommand{\smx}[1]{
-	(
-	\hskip-2pt
-	\begin{smallmatrix}
-		#1
-	\end{smallmatrix}
-	\hskip-2pt
-	)
+	% Tighter horizontal spacing than psmallmatrix
+	( \hskip-2pt
+	\begin{smallmatrix} #1 \end{smallmatrix}
+	\hskip-2pt )
 }
 
 
-% Matrixpunc doesn't do commas, which might have other uses
+% \matrixpunc{...} essentially turns ";" into "\\" to make
+% typesetting column vectors and points easier.
 \newcommand{\matrixpunc}[1]{%
 	\mathcode`\;="8000
 	\begingroup
@@ -38,5 +24,7 @@
 	#1
 	\mathcode`\;="603B
 }
+
+% Shortcuts using matrixpunc
 \newcommand{\pt}[1]{\smx{\matrixpunc{#1}}}
 \newcommand{\dpt}[1]{\mx{\matrixpunc{#1}}}

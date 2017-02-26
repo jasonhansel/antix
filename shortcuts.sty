@@ -45,14 +45,11 @@
 
 % Greek leters
 \newcommand{\alp}{\ensuremath{\alpha}}
-\AtBeginDocument{
-	% Not just "AtEndOfClass" because it conflicts with "times new roman"
+\newcommand{\fee}{\ensuremath{\varphi}\xspace}
+\let\oldphi\phi
+\AtBeginDocument{ % Make sure to load these after Times New Roman stuff
 	\renewcommand{\^}{\lambda}
 	\renewcommand{\l}{\lambda}
-}
-\newcommand{\fee}{\ensuremath{\varphi}\xspace}
-\AtBeginDocument{
-	\let\oldphi\phi
 	\renewcommand{\phi}[1][]{\ifthenelse{\equal{#1}{}}{\oldphi}{\oldphi(#1)}}
 }
 
@@ -133,12 +130,10 @@
 
 % Fractions and radicals
 \newcommand{\rt}{\sqrt}
-\AtBeginDocument{
-	\renewcommand{\sf}{\nicefrac}
-	\newcommand{\half}{\sf{1}{2}\:}
-	\newcommand{\halve}[1]{\sf{#1}{2}}
-	\newcommand{\ofpi}[2]{\nicefrac{#1}{#2}\pi}
-}
+\renewcommand{\sf}{\nicefrac}
+\newcommand{\half}{\sf{1}{2}\:}
+\newcommand{\halve}[1]{\sf{#1}{2}}
+\newcommand{\ofpi}[2]{\nicefrac{#1}{#2}\pi}
 
 
 % amsmath delimiters and operators
@@ -165,7 +160,7 @@
 \newcommand{\lin}{\overline}
 \newcommand{\ci}[1]{\ensuremath{\mathcal{#1}}}
 \newcommand{\mathsc}[1]{\text{\normalfont\scshape#1}}
-	% Above from http://tex.stackexchange.com/questions/13040/small-caps-for-the-math-mode
+	% See http://tex.stackexchange.com/questions/13040/
 
 
 % Common sets of numbers
