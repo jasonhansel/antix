@@ -8,14 +8,17 @@
 \NeedsTeXFormat{LaTeX2e}
 
 % Basic encoding/font stuff
-\RequirePackage{lmodern} % Improved Computer Modern font
-\RequirePackage[utf8]{inputenc} % UTF8 support
 \RequirePackage[T1]{fontenc} % Modern fonts
+\RequirePackage[utf8]{inputenc} % UTF8 support
+\RequirePackage{lmodern} % Improved Computer Modern font
+
+
 
 
 % Prevent clash with timesnewroman
 \RequirePackage[full]{textcomp}
 
+\RequirePackage[all]{xy} % nb: breqn-incompatible
 
 % Useful tools
 \RequirePackage{xkeyval} % DeclareOption but with key-value syntax
@@ -41,6 +44,16 @@
 \RequirePackage{bm} % Bold math
 \RequirePackage{units} % Annotate values with units
 \RequirePackage[mathscr]{eucal} % Use \mathscr for fancy script text
+\RequirePackage{sansmath}
+
+\makeatletter
+\renewcommand{\sfMathSwitch}{\sfsl
+  \make@math@version@font \textfont \fam \tf@size
+  % \make@math@version@font \scriptfont \fam \sf@size
+  % \make@math@version@font \scriptscriptfont \fam \ssf@size
+}
+\makeatother
+
 
 % Typography
 \RequirePackage[tiny, rigidchapters, bf, explicit, pagestyles]{titlesec}
@@ -145,17 +158,27 @@
 	\DefineShortVerb{\|}
 }}
 \DeclareOptionX{algorithms}{\AtEndOfClass{
-  \usepackage[linesnumbered]{algorithm2e}
+  \usepackage[linesnumbered,commentsnumbered]{algorithm2e}
   \SetKw{KwLet}{let}
   \SetKw{KwWhere}{where}
   \SetKw{KwBreak}{break}
   \DontPrintSemicolon
   \let\gets\leftarrow
   \SetArgSty{textrm}
+  \SetFuncSty{textrm}
+  \SetFuncArgSty{textrm}
+  \SetAlCapSty{textrm}
   \SetAlgoSkip{}
   \IncMargin{2em}
   \SetKwSty{boldcompact}
   \SetKwProg{Fn}{function}{ is}{end}
+  \newcommand{\commentstyle}{\sffamily\relsize{-0.5}\sansmath}
+  \SetKwComment{Comment}{\fontfamily{phv}\selectfont\relsize{0.5}// }{}
+
+  \SetCommentSty{commentstyle}
+  \SetKwInput{AlgoTitle}{Algorithm}
+  \SetKwInput{AlgoTitleT}{Initialization Code}
+  \SetAlgoInsideSkip{medskip}
 }}
 
 % Page margins
@@ -163,6 +186,12 @@
 \DeclareOptionX{margin}{
 	\geometry{margin=#1in,includehead,includefoot}
 }
+
+\newpagestyle{def}{
+  \sethead{}{}{}
+  \setfoot{}{}{}
+}
+\pagestyle{def}
 
 % Header and footer
 \DeclareOptionX{smallheader}{
@@ -181,7 +210,7 @@
 
 \DeclareOptionX{ragged}{
 	\setlength{\RaggedRightParindent}{\parindent}
-	\RaggedRight
+	\raggedright % Actually, ragged2e isn't very good
 }
 
 \DeclareOptionX{parindent}{

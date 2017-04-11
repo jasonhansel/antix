@@ -21,10 +21,28 @@
 \renewcommand{\sc}{\textsc}
 \renewcommand{\tt}{\texttt}
 
+% See http://tex.stackexchange.com/questions/150058/horizontal-rule-between-lines-that-vertically-takes-up-only-its-height-and-that
+\usepackage{stackengine}
+\newlength\rulethickness
+\newcommand\setlineseprule[1][.2pt]{%
+  \setlength\rulethickness{#1}}
+\setlineseprule
+\newcommand\lineseprule[2][.7\baselineskip]{%
+  \def\useanchorwidth{T}\def\stackalignment{l}\def\stacktype{L}%
+  \hspace{0pt}\smash{\stackon[#1]{}{%
+  \rule[-.5\rulethickness]{#2}{\rulethickness}}}%
+  \ignorespaces}
+\newcommand\lineaddrule[2][.7\baselineskip]{%
+  \def\useanchorwidth{T}\def\stackalignment{l}\def\stacktype{L}%
+  \vspace{\rulethickness}%
+  \hspace{0pt}\smash{\stackon[#1]{}{%
+  \rule{#2}{\rulethickness}}}%
+  \ignorespaces}
+
 % Horizontal Rules
 \newcommand{\thr}{\medskip\hrule} % Space before only
 \newcommand{\hr}{\par\vspace{5pt}\hrule\vspace{5pt}\par} % Page-wide
-\newcommand{\chr}{\par\vspace{-0.5\baselineskip}\hspace{-0.5\columnsep}\rule{\linewidth + \columnsep}{.5pt}\\}  % Column-wide
+\newcommand{\chr}{\par\hspace{-0.5\columnsep}\lineaddrule{\linewidth + \columnsep}\\\vspace{-\baselineskip}}  % Column-wide
 
 % Misc symbols (also for use in math mode)
 \newcommand{\by}{\ensuremath{\cdot}\xspace}
