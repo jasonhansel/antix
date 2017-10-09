@@ -1,4 +1,41 @@
 
+\newcommand{\dfff}{\mathrm{d}}
+
+\ExplSyntaxOn
+\tl_new:N \l_demo_tl
+\seq_new:N \l_seq
+\cs_new:Npn \dff #1 {
+    \tl_set:Nn \l_demo_tl {#1}
+    \seq_clear:N \l_seq
+    \regex_extract_all:nnNTF {.(?:_.|)} {#1} \l_seq {
+        \dfff\seq_use:Nnnn \l_seq {\wedge\dfff}{\wedge\dfff}{\wedge\dfff}
+    }{fail}
+}
+\ExplSyntaxOff
+
+
+%\newcommand{\dform}[1]{\mathrm{d}#1 }
+%\newcommand{\dffinner}[2]{\dform{#1}\stringprocess{\dform}{#2}}
+
+
+\newenvironment{wrapmath}[1][]{
+\nostar\begin{minipage}[t]{\linewidth}
+\vspace{-3.5mm}\begin{dmath*}[#1]
+}{
+\end{dmath*}\clearpage\end{minipage}
+}
+% \clearpage fixes whitespace iss.
+
+\newcommand{\env}[2]{\begin{#1}#2\end{#1}}
+\newcommand{\wrap}[2][]{
+\nostar\parbox[t]{\linewidth}{\vspace{-3.5mm}\begin{dmath*}[#1]
+#2
+\end{dmath*}\clearpage}
+}
+
+%\let\olddot\dot
+%\renewcommand{\dot}[1][]{\olddot #1}
+
 % MATH SHORTCUTS
 
 % (In)equalities
@@ -29,12 +66,17 @@
 \newcommand{\Iff}{\leftrightarrow}
 \newcommand{\If}[1]{#1 \to}
 \newcommand{\Ifp}[1]{(#1)\to}
-\newcommand{\infer}{\vdash}
+\newcommand{\infer}[1][]{\ifthenelse{\equal{#1}{}}{\vdash}{\vdash_{\mathrm #1}}}
 \newcommand{\proves}{\vdash}
 \newcommand{\entails}{\vDash}
 \newcommand{\nproves}{\nvdash}
 \newcommand{\nentails}{\nvDash}
 \newcommand{\from}[1]{#1\to}
+\newcommand{\Nec}{\square}
+\newcommand{\nNec}{\Not\square}
+\newcommand{\Pos}{\lozenge}
+\newcommand{\nPos}{\Not\lozenge}
+
 
 % Isomorphism, congruence, groups
 \newcommand{\iso}{\cong}
@@ -50,7 +92,7 @@
 \newcommand{\fee}{\ensuremath{\varphi}\xspace}
 \let\oldphi\phi
 \AtBeginDocument{ % Make sure to load these after Times New Roman stuff
-	\renewcommand{\^}{\lambda}
+	\renewcommand{\^}{\wedge}
 	\renewcommand{\l}{\lambda}
 	\renewcommand{\phi}[1][]{\ifthenelse{\equal{#1}{}}{\oldphi}{\oldphi(#1)}}
 }
@@ -101,6 +143,7 @@
 
 % Misc common symbols
 \newcommand{\G}{\Gamma}
+\newcommand{\g}{\gamma}
 \renewcommand{\P}[1]{\mathrm{P}(\kern-0.5pt#1)}
 \newcommand{\tri}{\triangle}
 \newcommand{\ox}{\otimes}
@@ -118,6 +161,15 @@
 \newcommand{\where}{\mid}
 \newcommand{\ndiv}{\nmid}
 
+% Analysis
+\newcommand{\dee}[2]{\partial_{#1}#2}
+\newcommand{\D}[2][]{\mathrm{D}_{#2}^{#1}}
+\renewcommand{\P}[2][]{\partial_{#2}^{#1}}
+\newcommand{\DF}[1]{\dff{#1}}
+\newcommand{\per}[1]{\:\mathrm{d}#1}
+\newcommand{\X}{\mathrm{d}}
+\newcommand{\Dee}[2]{\frac{\partial #2}{\partial #1}}
+\newcommand{\LR}[2]{\Lambda^{#1}\R^{#2}}
 
 % Ellipsis
 \newcommand{\etc}{\ensuremath{\cdots}\xspace}
@@ -127,23 +179,27 @@
 % Brackets, braces, etc.
 \newcommand{\<}[1]{\langle#1\rangle}
 \newcommand{\bpar}[1]{\bm{(} #1 \bm{)}}
-\newcommand{\parr}[1]{\left( #1 \right)}
+\newcommand{\of}[1]{\del{#1}}
 
 
 % Fractions and radicals
 \newcommand{\rt}{\sqrt}
-\renewcommand{\sf}{\nicefrac}
-\newcommand{\half}{\sf{1}{2}\:}
+\renewcommand{\sf}[2]{\mathop{\nicefrac{#1}{#2}}} % Make breqn happy
+\newcommand{\half}{\sf{1\kern-0.5pt}{\kern-0.5pt2}}
 \newcommand{\halve}[1]{\sf{#1}{2}}
-\newcommand{\ofpi}[2]{\nicefrac{#1}{#2}\pi}
+\newcommand{\ofpi}[2]{\sf{#1}{#2}\pi}
 
 
 % amsmath delimiters and operators
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \DeclareMathOperator{\im}{im}
+\let\Cap\relax
+\DeclareMathOperator{\Cap}{cap}
 \DeclareMathOperator{\area}{area}
 \DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Grad}{grad}
+\DeclareMathOperator{\Exp}{exp}
 \DeclareMathOperator{\orb}{orb}
 \DeclareMathOperator{\lcm}{lcm}
 \DeclareMathOperator{\Ker}{Ker}
@@ -152,6 +208,8 @@
 \DeclareMathOperator{\spn}{span}
 \DeclareMathOperator{\Ann}{Ann}
 \DeclareMathOperator{\rng}{rng}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Curl}{curl}
 
 % Division
 \let\iover\div
@@ -160,7 +218,6 @@
 
 % Text styles
 \newcommand{\lin}{\overline}
-\newcommand{\ci}[1]{\ensuremath{\mathcal{#1}}}
 \newcommand{\mathsc}[1]{\text{\normalfont\scshape#1}}
 	% See http://tex.stackexchange.com/questions/13040/
 
@@ -176,3 +233,6 @@
 \newcommand{\inv}[1]{\ensuremath{\frac{1}{#1}}}
 \newcommand{\sinv}[1]{\ensuremath{\sf{1}{#1}}}
 \newcommand{\gin}[1]{\ensuremath{#1^{-1}}}
+
+% Formal languages
+\newcommand{\lang}[1]{\set{#1}^{\star}}

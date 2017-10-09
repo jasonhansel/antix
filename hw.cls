@@ -12,13 +12,8 @@
 \RequirePackage[utf8]{inputenc} % UTF8 support
 \RequirePackage{lmodern} % Improved Computer Modern font
 
-
-
-
 % Prevent clash with timesnewroman
 \RequirePackage[full]{textcomp}
-
-\RequirePackage[all]{xy} % nb: breqn-incompatible
 
 % Useful tools
 \RequirePackage{xkeyval} % DeclareOption but with key-value syntax
@@ -26,7 +21,7 @@
 \RequirePackage[nomessages]{fp} % Arithmetic
 \RequirePackage{etoolbox} % Easier use of e-TeX extensions
 \RequirePackage[table,svgnames]{xcolor} % Color presets
-\RequirePackage{l3regex} % Regular expressions
+% \RequirePackage{l3regex} % Regular expressions
 \RequirePackage{xspace} % Macros that preserve spacing
 
 % Include "article.cls"; fontsize option must be processed early
@@ -39,7 +34,6 @@
 \RequirePackage{amssymb} % Useful symbols
 \RequirePackage[fleqn]{mathtools} % General math, including amsmath
 \RequirePackage{cancel} % Cancellation
-\RequirePackage[nice]{nicefrac} % Slashed fractions
 \RequirePackage{commath} % Math helpers
 \RequirePackage{bm} % Bold math
 \RequirePackage{units} % Annotate values with units
@@ -56,9 +50,13 @@
 
 
 % Typography
-\RequirePackage[tiny, rigidchapters, bf, explicit, pagestyles]{titlesec}
 \RequirePackage[english]{babel} % Multilingual tools
-\RequirePackage[autostyle, english=american,threshold=0]{csquotes} % Quotations
+\RequirePackage[autostyle, english=american]{csquotes} % Quotations
+\makeatletter
+%Remove \do\' from the list of reserved chars
+\def\csq@resrvdchars{\do\9}
+\makeatother
+
 \RequirePackage{ragged2e} % Non-justified text
 \RequirePackage{setspace} % Better line spacing
 \RequirePackage{soul} % Nice underlining
@@ -66,6 +64,7 @@
 \RequirePackage{titling}
 \RequirePackage[shortlabels]{enumitem} % Advanced lists
 \RequirePackage[parfill]{parskip} % Paragraph indent/skip
+\RequirePackage[tiny, rigidchapters, bf, pagestyles]{titlesec}
 
 % Page layout
 \RequirePackage[letterpaper]{geometry} % Page margins
@@ -82,6 +81,8 @@
 \RequirePackage{pgfpages} % TikZ page manipulation, can break hyperlinks
 \RequirePackage{prooftrees} % Truth trees
 \RequirePackage{forest} % Trees
+\RequirePackage[all]{xy} % Diagrams (*breaks* when breqn enabled)
+\RequirePackage{tikz-cd} % Diagrams (like xy-pic but better)
 
 % Verbatim mode tools
 \RequirePackage{alltt} % Like "verbatim" but with commands enabled
@@ -96,9 +97,25 @@
 \RequirePackage{makecell} % Table cell customization
 
 
+% Bibliography
+\RequirePackage[backend=biber,style=mla,hyperref=false,showmedium=false,doi=false]{biblatex}
+\renewcommand{\mkdatezeros}{\mkyearzeros}
+\defbibheading{bibliography}[\refname]{\noindent\b{#1}}
 
+
+\usepackage{siunitx}
 
 \RequirePackage{antix-settings}
+
+
+
+
+% Bibliography
+\newcommand{\ci}{\autocite}
+\newcommand{\cna}{\autocite*} % Omit author
+\newcommand{\cnp}{\cite} % Omit parens
+\newcommand{\cnap}{\cite*} % Omit parens and author
+
 
 
 % A box with a horizontal rule at the bottom.
@@ -143,12 +160,16 @@
 
 % Parse options
 
-\DeclareOptionX{linespacing}[1.2]{\AtEndOfClass{
+\DeclareOptionX{linesp}[1.2]{\AtEndOfClass{
 	\setstretch{#1}
 }}
 
+\DeclareOptionX{topaligntikz}{
+  \tikzset{baseline={([yshift={-\ht\strutbox}]current bounding box.north)},outer sep=0pt,inner sep=0pt}
+}
+
 % Enable by default
-\presetkeys{hw.cls}{linespacing}{}
+\presetkeys{hw.cls}{linesp}{}
 
 
 
@@ -202,6 +223,12 @@
   	\setheadrule{0.5pt}
   	\setfootrule{0.5pt}
   }
+  \newpagestyle{top}{
+    \sethead{\mythetitle}{}{Jason Hansel}
+    \setfoot{}{}{Page \thepage}
+    \setheadrule{0.5pt}
+    \setfootrule{0.5pt}
+  }
   \pagestyle{custom}
 }
 
@@ -219,7 +246,8 @@
 }
 
 \DeclareOptionX{nohyphen}{
-	%  May need to set "emergencystretch" to avoid line-break issues
+	%  May need to set "emergencystretch" to avoid line-break issues.
+  % May be better to use 'pretolerance' instead.
 	\hyphenpenalty=10000
 	\exhyphenpenalty=10000
 }
@@ -236,7 +264,11 @@
 \DeclareOptionX{fontface}{\AtEndOfClass{
 	\IfEqCase{#1}{
 		% Avoid always including "newtxtext" since it introduces log-parsing errors
-		{times}{ \RequirePackage{newtxtext} }
+		{times}{ \RequirePackage{newtxtext}
+    \renewcommand{\bfdefault}{b} % Actually this fixes log issues
+    \renewcommand{\b}{\textbf}
+    \renewcommand{\i}{\textit}
+     }
 		{minion}{ \RequirePackage[onlytext,textlf]{MinionPro} }
 	}
 }}
@@ -323,10 +355,13 @@
 
 
 
+
 \renewcommand\cellalign{tl}
 \setlength{\mathindent}{0pt}
 \AtEndOfClass{ % Configure csquotes; csquotes loaded late
 	\MakeOuterQuote{"}
+  % \MakeAutoQuote{`}{'}
+  \tikzset{every picture/.prefix code=\DisableQuotes} % Fix quotes in TikZ
 }
 
 
@@ -363,11 +398,17 @@
   \if@nobreqn
   \else
 	 \usepackage{breqn}
-	 \setkeys{breqn}{compact}
+	 % \setkeys{breqn}{compact}
+   % \setlength{\eq@linewidth}{0pt}
+\fi\fi
+% \let\originalleft\left
+% \let\originalright\right
+% \renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+% \renewcommand{\right}{\aftergroup\egroup\originalright}
 
-  \fi
-\fi
 
+% Redo after breqn
+\renewcommand{\del}[1]{\left(#1\right)}
 
 
 \makeatother

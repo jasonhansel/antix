@@ -6,6 +6,7 @@
 	backgrounds,
 	shapes.multipart,
 	chains,
+    automata,
 	calc
 }
 
@@ -24,8 +25,8 @@
 \RecustomVerbatimEnvironment{Verbatim}{Verbatim}{tabsize=4}
 
 % Make delimiters stretch less
-\delimiterfactor=800
-\delimitershortfall=3pt
+\delimiterfactor=400
+\delimitershortfall=5pt
 
 
 % Useful TikZ styles
@@ -39,9 +40,8 @@
 \setlist[itemize]{label=$\bullet$}
 
 % Headings
-\titleformat{\part}[hang]{}{}{0pt}{\textbf{#1}}
 \titlelabel{}
-\titlespacing{\part}{0pt}{0pt}{0pt}
+\titlespacing{\part}{0pt}{-\baselineskip}{-0.5\baselineskip}
 \titlespacing{\chapter}{0pt}{0pt}{0pt}
 \titlespacing{\section}{0pt}{0pt}{0pt}
 \titlespacing{\subsection}{0pt}{0pt}{0pt}
@@ -55,4 +55,13 @@
 \newcounter{chapter}
 \renewcommand{\thechapter}{}
 \renewcommand{\chaptertitlename}{}
-\titleformat{\chapter}[hang]{}{}{0pt}{\textbf{#1}}[]
+\titleformat{\chapter}[hang]{}{}{0pt}{\textbf}[]
+\newcommand{\bbf}[1]{\textbf{#1}}
+\titleformat{\part}[block]{}{}{0pt}{\bbf}
+\titleformat{\section}[runin]{}{}{0pt}{\u}[\enspace]
+
+\newcommand{\problem}[1]{\clearpage\textbf{#1}\par}
+
+
+% Improve tikz-cd arrows
+\tikzcdset{every arrow/.append style = -{Latex[scale=1.25]}}

@@ -8,9 +8,9 @@
 % Small-size matrix
 \newcommand{\smx}[1]{
 	% Tighter horizontal spacing than psmallmatrix
-	( \hskip-2pt
+	\of{ \hskip-2pt
 	\begin{smallmatrix} #1 \end{smallmatrix}
-	\hskip-2pt )
+	\hskip-2pt }
 }
 
 
@@ -26,5 +26,6 @@
 }
 
 % Shortcuts using matrixpunc
-\newcommand{\pt}[1]{\smx{\matrixpunc{#1}}}
+\newcommand{\pt}[1]{\matrixpunc{\smx{#1}}}
 \newcommand{\dpt}[1]{\mx{\matrixpunc{#1}}}
+\newcommand{\fmx}[1]{\matrixpunc{\mx{#1}}}
