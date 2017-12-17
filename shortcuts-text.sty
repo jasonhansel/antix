@@ -1,4 +1,8 @@
 
+
+\newcommand{\Prob}[1]{\clearpage\textbf{#1}\par}
+\newcommand{\prob}[1]{\par\pagebreak[2]\textbf{#1}\\*}
+
 % Common pieces of text
 \newcommand{\dst}[1][]{distinct\xspace}
 \newcommand{\htn}[1][]{Hamiltonian\xspace}
@@ -40,13 +44,14 @@
   \def\useanchorwidth{T}\def\stackalignment{l}\def\stacktype{L}%
   \vspace{\rulethickness}%
   \hspace{0pt}\smash{\stackon[#1]{}{%
-  \rule{#2}{\rulethickness}}}%
+  \rule{#2}{0.5pt}}}%
   \ignorespaces}
 
 % Horizontal Rules
 \newcommand{\thr}{\medskip\hrule} % Space before only
 \newcommand{\hr}{\par\vspace{5pt}\hrule\vspace{5pt}\par} % Page-wide
 \newcommand{\chr}{\par\hspace{-0.5\columnsep}\lineaddrule{\linewidth + \columnsep}\\\vspace{-\baselineskip}}  % Column-wide
+\renewcommand{\cbr}{\chr\columnbreak\chr}  % Column-wide
 
 % Misc symbols (also for use in math mode)
 \newcommand{\by}{\ensuremath{\cdot}\xspace}

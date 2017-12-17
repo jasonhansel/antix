@@ -1,3 +1,8 @@
+
+
+% TODO: https://tex.stackexchange.com/a/311476
+% \newcommand{\textgreek}[1]{\textit{\begingroup\fontencoding{LGR}\selectfont#1\endgroup}}
+
 % hw.cls
 % LaTeX2e class file for generic homework assignments, with a variety
 % of shortcuts and useful features. Meant to be adaptable to a wide
@@ -7,8 +12,10 @@
 \ProvidesClass{hw}[2015/10/18 Homework]
 \NeedsTeXFormat{LaTeX2e}
 
+% \RequirePackage{etex}
+
 % Basic encoding/font stuff
-\RequirePackage[T1]{fontenc} % Modern fonts
+\RequirePackage[LGR,T1]{fontenc} % Modern fonts
 \RequirePackage[utf8]{inputenc} % UTF8 support
 \RequirePackage{lmodern} % Improved Computer Modern font
 
@@ -17,12 +24,6 @@
 
 % Useful tools
 \RequirePackage{xkeyval} % DeclareOption but with key-value syntax
-\RequirePackage{xstring} % String manipulation
-\RequirePackage[nomessages]{fp} % Arithmetic
-\RequirePackage{etoolbox} % Easier use of e-TeX extensions
-\RequirePackage[table,svgnames]{xcolor} % Color presets
-% \RequirePackage{l3regex} % Regular expressions
-\RequirePackage{xspace} % Macros that preserve spacing
 
 % Include "article.cls"; fontsize option must be processed early
 \DeclareOptionX<early>{fontsize}{ \PassOptionsToClass{#1}{article} }
@@ -30,33 +31,35 @@
 \ProcessOptionsX<early>
 \LoadClass[fleqn]{article}
 
+
+\RequirePackage{xstring} % String manipulation
+\RequirePackage[nomessages]{fp} % Arithmetic
+\RequirePackage{etoolbox} % Easier use of e-TeX extensions
+\RequirePackage[table,svgnames]{xcolor} % Color presets
+\RequirePackage{xspace} % Macros that preserve spacing
+
+
 % Math, symbols, etc.
 \RequirePackage{amssymb} % Useful symbols
 \RequirePackage[fleqn]{mathtools} % General math, including amsmath
 \RequirePackage{cancel} % Cancellation
 \RequirePackage{commath} % Math helpers
 \RequirePackage{bm} % Bold math
-\RequirePackage{units} % Annotate values with units
+\RequirePackage{nicefrac} % Annotate values with units
 \RequirePackage[mathscr]{eucal} % Use \mathscr for fancy script text
 \RequirePackage{sansmath}
-
-\makeatletter
-\renewcommand{\sfMathSwitch}{\sfsl
-  \make@math@version@font \textfont \fam \tf@size
-  % \make@math@version@font \scriptfont \fam \sf@size
-  % \make@math@version@font \scriptscriptfont \fam \ssf@size
-}
-\makeatother
+\RequirePackage{scalerel}
 
 
 % Typography
+\RequirePackage{lineno}
 \RequirePackage[english]{babel} % Multilingual tools
 \RequirePackage[autostyle, english=american]{csquotes} % Quotations
 \makeatletter
 %Remove \do\' from the list of reserved chars
 \def\csq@resrvdchars{\do\9}
 \makeatother
-
+\RequirePackage{pbox}
 \RequirePackage{ragged2e} % Non-justified text
 \RequirePackage{setspace} % Better line spacing
 \RequirePackage{soul} % Nice underlining
@@ -73,7 +76,7 @@
 
 % Boxes and frames
 \RequirePackage{tcolorbox} % Colorful boxes
-\RequirePackage{adjustbox} % Transform text boxes
+\RequirePackage[export]{adjustbox} % Transform text boxes
 \RequirePackage{framed} % Better framed/shaded regions
 
 % Graphics
@@ -91,19 +94,33 @@
 
 
 % Tables
-\RequirePackage{tabu} % Advanced table-related features
+\RequirePackage[delarray]{tabu} % Advanced table-related features
 \RequirePackage{multirow} % Easy multi-row cells
 \RequirePackage[thinlines]{easytable} % Misc. table shortcuts
 \RequirePackage{makecell} % Table cell customization
 
-
-% Bibliography
+% Misc
+\RequirePackage{syntax} % https://tex.stackexchange.com/questions/24886/
 \RequirePackage[backend=biber,style=mla,hyperref=false,showmedium=false,doi=false]{biblatex}
+\RequirePackage{siunitx}
+
+
+% Sans math
+\makeatletter
+\renewcommand{\sfMathSwitch}{\sfsl
+  \make@math@version@font \textfont \fam \tf@size
+}
+\makeatother
+
+
+% Grammar
+\setlength{\grammarparsep}{20pt plus 1pt minus 1pt} % increase separation between rules
+\setlength{\grammarindent}{6em} % increase separation between LHS/RHS 
+
+% Bib;liography settings
 \renewcommand{\mkdatezeros}{\mkyearzeros}
 \defbibheading{bibliography}[\refname]{\noindent\b{#1}}
 
-
-\usepackage{siunitx}
 
 \RequirePackage{antix-settings}
 
@@ -133,21 +150,17 @@
 % For "asterisk" option
 \def\nostar{\catcode`\*=12}
 \def\restar{\catcode`\*=13}
+\def\noqmark{\catcode`?=12}
+\def\reqmark{\catcode`?=13}
 \newenvironment{fixstar}{\catcode`*=12}{}
 
 \RequirePackage{shortcuts}
 \RequirePackage{shortcuts-text}
-
-\newcommand{\eof}{\end{document}}
-
-\newcommand{\br}{\\[\baselineskip]}
-
-% Environments
+\RequirePackage{shortcuts-matrix}
 
 \newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
 \newcolumntype{R}{>{$}r<{$}} % math-mode version of "l" column type
 
-\usepackage{shortcuts-matrix}
 
 
 % Allow right-aligned cases in math mode
@@ -168,6 +181,8 @@
   \tikzset{baseline={([yshift={-\ht\strutbox}]current bounding box.north)},outer sep=0pt,inner sep=0pt}
 }
 
+
+
 % Enable by default
 \presetkeys{hw.cls}{linesp}{}
 
@@ -183,6 +198,7 @@
   \SetKw{KwLet}{let}
   \SetKw{KwWhere}{where}
   \SetKw{KwBreak}{break}
+  \SetKw{Return}{return}
   \DontPrintSemicolon
   \let\gets\leftarrow
   \SetArgSty{textrm}
@@ -193,8 +209,8 @@
   \IncMargin{2em}
   \SetKwSty{boldcompact}
   \SetKwProg{Fn}{function}{ is}{end}
-  \newcommand{\commentstyle}{\sffamily\relsize{-0.5}\sansmath}
-  \SetKwComment{Comment}{\fontfamily{phv}\selectfont\relsize{0.5}// }{}
+  \newcommand{\commentstyle}{\sffamily\relsize{-0.5}}
+  \SetKwComment{Comment}{\fontfamily{phv}\selectfont\relsize{-0.5}// }{}
 
   \SetCommentSty{commentstyle}
   \SetKwInput{AlgoTitle}{Algorithm}
@@ -203,9 +219,9 @@
 }}
 
 % Page margins
-\geometry{letterpaper,headheight=0pt,headsep=0in,margin=1in,includehead,includefoot}
+\geometry{letterpaper,headheight=0pt,headsep=0in,margin=1in,ignoreheadfoot}
 \DeclareOptionX{margin}{
-	\geometry{margin=#1in,includehead,includefoot}
+	\geometry{margin=#1in}
 }
 
 \newpagestyle{def}{
@@ -214,9 +230,13 @@
 }
 \pagestyle{def}
 
+
+
+
+
 % Header and footer
 \DeclareOptionX{smallheader}{
-  \geometry{headheight=15pt,headsep=10pt}
+  \geometry{headheight=15pt,headsep=10pt,includehead,includefoot}
   \newpagestyle{custom}{
   	\sethead{\mythetitle}{}{Jason Hansel}
   	\setfoot{}{}{Page \thepage}
@@ -234,6 +254,7 @@
 
 
 \setlength{\parindent}{0em}
+\setlength{\arraycolsep}{2pt}
 
 \DeclareOptionX{ragged}{
 	\setlength{\RaggedRightParindent}{\parindent}
@@ -285,7 +306,12 @@
 \newif\if@nobreqn
 \@nobreqnfalse
 \DeclareOptionX{nobreqn}{\@nobreqntrue}
+
+\newif\if@forceams
+\@forceamsfalse
+\DeclareOptionX{forceams}{\@forceamstrue}
 \makeatother
+
 
 
 
@@ -309,6 +335,8 @@
     }
 }}
 
+
+
 \DeclareOptionX{colsep}{\AtEndOfClass{
   \setlength{\columnseprule}{0.2pt}
 }}
@@ -329,6 +357,7 @@
 	}
 }
 
+
 % Like "questionmark" but for asterisks
 \DeclareOptionX{asterisk}{
     % 1. Define \questionMarkCommand as \#1
@@ -344,6 +373,35 @@
 	}
 }
 
+
+\DeclareOptionX{micro}{ % For review sheets
+  \setlength{\columnsep}{5pt}
+\setlength{\columnseprule}{0.5pt}
+\setlength{\parskip}{0pt}
+\setlist[itemize]{noitemsep,leftmargin=0.7em,label=\textbullet,labelsep=0.2em}
+\setlist[itemize,2]{noitemsep,leftmargin=0.7em,label=\textbullet,labelsep=0.2em}
+\setlist[enumerate]{noitemsep,leftmargin=1em,labelsep=0.2em}
+\setlist[enumerate,2]{a),leftmargin=1.2em}
+\renewcommand\bfdefault{b}
+\linepenalty=10000
+\hfuzz 100pt
+\emergencystretch 0pt
+}
+
+\makeatletter
+\DeclareOptionX{pageborder}{
+  % \usepackage{showframe}
+
+\def\Gm@hruled{}
+\def\Gm@hrule{}
+\def\Gm@vrule{\vrule width 0.5pt height\textheight depth\z@}
+% \def\Gm@hrule{\moveleft.5\columnsep\vbox{\hrule height 0.5pt depth\z@ width\textwidth}}
+\renewcommand*{\Gm@vrules@mpi}{%
+\hb@xt@\textwidth{\hspace{-0.5\columnsep}\Gm@vrule\hskip\textwidth\hspace{4.5pt}\Gm@vrule}}
+
+\geometry{showframe}
+}
+\makeatother
 
 % \ProcessOptionsX
 \ProcessOptionsX
@@ -379,7 +437,6 @@
 
 
 
-
 % http://tex.stackexchange.com/questions/1273/loading-a-package-conditionally
 \makeatletter
 \if@incons
@@ -398,9 +455,33 @@
   \if@nobreqn
   \else
 	 \usepackage{breqn}
+   % fix a weird bug with the '+' sign wrapping in breqn - not sure why 
+   % this is ever necessary...
+   % \DeclareFlexSymbol{+}{Bin}{OT1}{2B}
 	 % \setkeys{breqn}{compact}
    % \setlength{\eq@linewidth}{0pt}
 \fi\fi
+
+
+
+% must be after 'breqn'
+\if@forceams
+% force amsmath, and replace '$' and '$$' with LaTeX equivalents.
+% May break tikz.
+\RequirePackage[all,error]{onlyamsmath}
+\setlength{\mathindent}{3em}
+\renewcommand{\dspcomplain}[1]{
+\ifmmode
+    \expandafter\]
+\else
+    \expandafter\[
+\fi
+}  
+\fi
+
+
+\makeatother
+
 % \let\originalleft\left
 % \let\originalright\right
 % \renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
@@ -409,11 +490,7 @@
 
 % Redo after breqn
 \renewcommand{\del}[1]{\left(#1\right)}
-
-
-\makeatother
-
-
+\renewcommand{\ne}{\ensuremath{\neq}}
 
 
 

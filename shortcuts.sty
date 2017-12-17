@@ -1,14 +1,36 @@
 
-\newcommand{\dfff}{\mathrm{d}}
 
+
+
+\newcommand{\dfff}{\mathrm{d}}
+\newcommand{\dfs}{{\!\hiderel{\wedge}\!\dfff}}
+
+\RequirePackage{gtl}
 \ExplSyntaxOn
 \tl_new:N \l_demo_tl
 \seq_new:N \l_seq
 \cs_new:Npn \dff #1 {
     \tl_set:Nn \l_demo_tl {#1}
-    \seq_clear:N \l_seq
-    \regex_extract_all:nnNTF {.(?:_.|)} {#1} \l_seq {
-        \dfff\seq_use:Nnnn \l_seq {\wedge\dfff}{\wedge\dfff}{\wedge\dfff}
+    \seq_gclear:c {l_seq}
+    \regex_extract_all:nnNTF {(?:.(?:_.|_\{.*?\}|)|\{.*?\{.*?\}.*?\})\s*} {#1} \l_seq {
+        \dfff\seq_use:Nnnn \l_seq {\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}
+    }{fail}
+%}
+%    \regex_extract_all:nnNTF {(?:.(?:_.|_\{.*?\})|\{.*?\})\s*} {#1} \l_seq {
+%        \dfff\seq_use:Nnnn \l_seq {\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}
+%    }{fail}
+}
+\ExplSyntaxOff
+
+
+% Intersperse one string in another
+% TODO handle more complex subscripts and superscripts
+\ExplSyntaxOn
+\cs_new:Npn \inter #1 #2 {
+    \tl_set:Nn \l_demo_tl {#2}
+    \seq_gclear:c {l_seq}
+    \regex_extract_all:nnNTF {.(?:\c[O][_^](?:.|\c{.*})|')*\s*} {#2} \l_seq {
+        \seq_use:Nnnn \l_seq {#1}{#1}{#1}
     }{fail}
 }
 \ExplSyntaxOff
@@ -18,21 +40,31 @@
 %\newcommand{\dffinner}[2]{\dform{#1}\stringprocess{\dform}{#2}}
 
 
-\newenvironment{wrapmath}[1][]{
-\nostar\begin{minipage}[t]{\linewidth}
-\vspace{-3.5mm}\begin{dmath*}[#1]
-}{
-\end{dmath*}\clearpage\end{minipage}
-}
-% \clearpage fixes whitespace iss.
+
+
+\newcommand{\dx}{\dot x}
+\newcommand{\dy}{\dot y}
+\newcommand{\dz}{\dot z}
+\newcommand{\ddx}{\ddot x}
+\newcommand{\ddy}{\ddot y}
+\newcommand{\ddz}{\ddot z}
+\newcommand{\bet}{\beta}
 
 \newcommand{\env}[2]{\begin{#1}#2\end{#1}}
-\newcommand{\wrap}[2][]{
-\nostar\parbox[t]{\linewidth}{\vspace{-3.5mm}\begin{dmath*}[#1]
+
+% Shortcuts for typesetting math
+\newcommand{\wrap}[2][]{\begingroup\setlength{\mathindent}{0pt}\nostar\parbox[t]{\linewidth}{\vspace{-3.5mm}\begin{dmath*}[#1]#2\end{dmath*}\clearpage}\endgroup}
+% \clearpage fixes some whitespace issues
+\newcommand{\eqn}[2][3em]{
+\)\begingroup\setlength{\mathindent}{#1}\[#2\]\endgroup\(\!\!}
+\newcommand{\tabl}[2][.{lllll}.]{
+\expandafter\begin{tabu}#1
 #2
-\end{dmath*}\clearpage}
+\end{tabu}\)\par\(\!\!
 }
 
+\newcommand{\mathlarge}[1]{\textrm{\footnotesize{\ensuremath{#1}}}}
+\newcommand{\textrmq}[1]{\ensuremath{\noqmark\textrm{#1}\reqmark}}
 %\let\olddot\dot
 %\renewcommand{\dot}[1][]{\olddot #1}
 
@@ -43,7 +75,7 @@
 \newcommand{\lte}{\leq}
 \newcommand{\lt}{<}
 \newcommand{\gt}{>}
-\renewcommand{\ne}{\neq}
+
 \newcommand{\abt}{\approx}
 
 % Sets
@@ -51,6 +83,8 @@
 \newcommand{\unin}{\cup}
 \newcommand{\isec}{\cap}
 \newcommand{\slte}{\subseteq}
+\newcommand{\sgt}{\supset}
+\newcommand{\sgte}{\supseteq}
 \newcommand{\nslte}{\nsubseteq}
 \newcommand{\slt}{\subset}
 \newcommand{\sset}{\subseteq}
@@ -58,8 +92,15 @@
 \newcommand{\except}{\setminus}
 \newcommand{\mt}{\varnothing}
 
+\renewcommand{\set}[1]{{\left\{%
+#1\right\}}}
+
+\newcommand{\accept}{_{\textrm{\scriptsize accept}}}
+\newcommand{\reject}{_{\textrm{\scriptsize reject}}}
+
 % Logic
 \let\oldOr\lor
+\newcommand{\al}{\alt}
 \renewcommand{\And}{\land}
 \newcommand{\Or}{\oldOr}
 \newcommand{\Not}{\lnot}
@@ -73,6 +114,7 @@
 \newcommand{\nentails}{\nvDash}
 \newcommand{\from}[1]{#1\to}
 \newcommand{\Nec}{\square}
+\newcommand{\blank}{\square}
 \newcommand{\nNec}{\Not\square}
 \newcommand{\Pos}{\lozenge}
 \newcommand{\nPos}{\Not\lozenge}
@@ -86,6 +128,8 @@
 \newcommand{\ncon}{\not\equiv}
 \newcommand{\adjoin}[1]{\lbrack#1\rbrack}
 
+% Complex numbers.
+\newcommand{\conj}{\overline}
 
 % Greek leters
 \newcommand{\alp}{\ensuremath{\alpha}}
@@ -118,7 +162,7 @@
 \renewcommand{\exp}[1]{\ensuremath{e^{#1}}}
 \renewcommand{\1}{^{-1}}
 \renewcommand{\2}{^{-2}}
-\newcommand{\T}{^{\displaystyle t}} % Transposition of a matrix
+\newcommand{\T}{^{\,\displaystyle t}} % Transposition of a matrix
 
 % Common "roman" text in math formulae
 \newcommand{\is}{\textrm{ is }\xspace}
@@ -136,6 +180,7 @@
 \newcommand{\ef}{\ensuremath{\mathcal{F}}\xspace}
 \newcommand{\kay}[1][]{\ensuremath{\ifthenelse{\equal{#1}{}}{\mathcal{K}}{\mathcal{K}_{#1}}}}
 \newcommand{\gee}[1][]{\ensuremath{\ifthenelse{\equal{#1}{}}{\mathcal{G}}{\mathcal{G}_{#1}}}}
+\newcommand{\hs}[1][]{\star\ifthenelse{\equal{#1}{}}{}{\of{#1}}}
 
 % Computer science
 \newcommand{\subtype}{\mathbin{<:}}
@@ -144,6 +189,9 @@
 % Misc common symbols
 \newcommand{\G}{\Gamma}
 \newcommand{\g}{\gamma}
+\newcommand{\w}{\omega}
+\newcommand{\W}{\Omega}
+\newcommand{\Item}{\clearpage\item}
 \renewcommand{\P}[1]{\mathrm{P}(\kern-0.5pt#1)}
 \newcommand{\tri}{\triangle}
 \newcommand{\ox}{\otimes}
@@ -157,27 +205,24 @@
 \renewcommand{\tilde}{\ensuremath{\raise.18ex\hbox{$\scriptstyle\sim$}}}
 
 % Various uses of vertical bars
-\newcommand{\given}{\mid}
-\newcommand{\where}{\mid}
+\newcommand{\given}{\mathpunct{\mid}}
+\newcommand{\where}[0]{\:\noindent\middle|\:}
 \newcommand{\ndiv}{\nmid}
 
 % Analysis
-\newcommand{\dee}[2]{\partial_{#1}#2}
-\newcommand{\D}[2][]{\mathrm{D}_{#2}^{#1}}
-\renewcommand{\P}[2][]{\partial_{#2}^{#1}}
+\newcommand{\D}[2][]{\mathop{\mathrm{D}_{\mathlarge{#2}}^{#1}}}
+\renewcommand{\P}[2][]{\mathop{\partial_{\mathlarge{#2}}^{#1}}}
 \newcommand{\DF}[1]{\dff{#1}}
-\newcommand{\per}[1]{\:\mathrm{d}#1}
 \newcommand{\X}{\mathrm{d}}
+\newcommand{\J}[1]{\mathrm{J}\of{#1}}
 \newcommand{\Dee}[2]{\frac{\partial #2}{\partial #1}}
 \newcommand{\LR}[2]{\Lambda^{#1}\R^{#2}}
 
 % Ellipsis
-\newcommand{\etc}{\ensuremath{\cdots}\xspace}
-\newcommand{\letc}{\;\etc\;}
-\newcommand{\etco}[1]{#1\etc#1}
+\newcommand{\etc}[1][]{#1\ensuremath{\cdots}#1}
 
 % Brackets, braces, etc.
-\newcommand{\<}[1]{\langle#1\rangle}
+\newcommand{\<}[1]{\left\langle #1 \right\rangle}
 \newcommand{\bpar}[1]{\bm{(} #1 \bm{)}}
 \newcommand{\of}[1]{\del{#1}}
 
@@ -214,6 +259,7 @@
 % Division
 \let\iover\div
 \newcommand{\inlinediv}{\mathbin{\iover}\,}
+\newcommand{\idiv}{\mathbin{\iover}\,}
 \renewcommand{\div}{\mathbin{\mid}}
 
 % Text styles
@@ -236,3 +282,10 @@
 
 % Formal languages
 \newcommand{\lang}[1]{\set{#1}^{\star}}
+
+% Schwartz, Hilbert spaces
+\renewcommand{\S}{\mathscr{S}}
+\renewcommand{\H}{\mathscr{H}}
+
+% Misc
+\newcommand{\alc}{\conj{\alp}}

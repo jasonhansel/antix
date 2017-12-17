@@ -1,5 +1,22 @@
 % Standard matrix
-\newcommand{\mx}[1]{ \begin{pmatrix} #1 \end{pmatrix} }
+
+\newcommand{\parmath}[1][]{\)\\[#1]}
+% REQUIRES forceams, which can break TikZ
+\def\skipdollar{
+	\let\oldDollarCode$
+	\def\newDollarCode{
+		\begingroup
+		  \lccode`\~=`\$
+		  \lowercase{\endgroup\let~}\oldDollarCode
+	}
+	\begingroup
+	  \lccode`\~=`\$
+	  \lowercase{\endgroup\let~}\newDollarCode
+	
+}
+\newcommand{\lmx}[1]{\begin{tabu}{lllllllll} #1 \end{tabu}}
+\newcommand{\mx}[1]{ \begin{tabu}({ccccccccc}) #1 \end{tabu} }
+%\newcommand{\mx}[1]{ \begin{pmatrix} #1 \end{pmatrix} }
 % Matrix in square brackets
 \newcommand{\bmx}[1]{ \begin{bmatrix} #1 \end{bmatrix} }
 % Matrix in absolute-value signs
@@ -25,7 +42,46 @@
 	\mathcode`\;="603B
 }
 
+
+\newcommand{\edf}[1]{%
+	\textrm{d}
+	\mathcode`\;="8000
+	\begingroup
+		\lccode`~=`;
+		\lowercase{\endgroup \def~{
+				\wedge
+				\textrm{d}
+		} }
+	#1
+	\mathcode`\;="603B
+}
+
+
+% \matrixpunc{...} essentially turns ";" into "\\" to make
+% typesetting column vectors and points easier.
+\newtoggle{modcount}
+\newcommand{\Df}[1]{%
+	\togglefalse{modcount}
+	\mathcode`\;="8000
+	\begingroup
+		\lccode`~=`;
+		\lowercase{\endgroup \def~{
+			\iftoggle{modcount}{
+				\togglefalse{modcount}
+				\wedge
+			}{
+				\toggletrue{modcount}
+				\textrm{d}
+			}
+		} }
+	#1
+	\mathcode`\;="603B
+}
+
+\newcommand{\DD}[1]{\Df{#1}}
+
 % Shortcuts using matrixpunc
 \newcommand{\pt}[1]{\matrixpunc{\smx{#1}}}
 \newcommand{\dpt}[1]{\mx{\matrixpunc{#1}}}
 \newcommand{\fmx}[1]{\matrixpunc{\mx{#1}}}
+\newcommand{\flmx}[1]{\parmath[-\baselineskip]\(\matrixpunc{\lmx{#1}}\parmath[0pt]\skipdollar}
