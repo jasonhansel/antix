@@ -5,6 +5,7 @@
 \newcommand{\dfff}{\mathrm{d}}
 \newcommand{\dfs}{{\!\hiderel{\wedge}\!\dfff}}
 
+% Differential forms
 \RequirePackage{gtl}
 \ExplSyntaxOn
 \tl_new:N \l_demo_tl
@@ -15,10 +16,6 @@
     \regex_extract_all:nnNTF {(?:.(?:_.|_\{.*?\}|)|\{.*?\{.*?\}.*?\})\s*} {#1} \l_seq {
         \dfff\seq_use:Nnnn \l_seq {\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}
     }{fail}
-%}
-%    \regex_extract_all:nnNTF {(?:.(?:_.|_\{.*?\})|\{.*?\})\s*} {#1} \l_seq {
-%        \dfff\seq_use:Nnnn \l_seq {\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}
-%    }{fail}
 }
 \ExplSyntaxOff
 
@@ -36,31 +33,31 @@
 \ExplSyntaxOff
 
 
-%\newcommand{\dform}[1]{\mathrm{d}#1 }
-%\newcommand{\dffinner}[2]{\dform{#1}\stringprocess{\dform}{#2}}
+% Variables of various sorts
+\newcommand{\odx}{\dot x}
+\newcommand{\ody}{\dot y}
+\newcommand{\odz}{\dot z}
+\newcommand{\oddx}{\ddot x}
+\newcommand{\oddy}{\ddot y}
+\newcommand{\oddz}{\ddot z}
 
-
-
-
-\newcommand{\dx}{\dot x}
-\newcommand{\dy}{\dot y}
-\newcommand{\dz}{\dot z}
-\newcommand{\ddx}{\ddot x}
-\newcommand{\ddy}{\ddot y}
-\newcommand{\ddz}{\ddot z}
-\newcommand{\bet}{\beta}
 
 \newcommand{\env}[2]{\begin{#1}#2\end{#1}}
 
 % Shortcuts for typesetting math
-\newcommand{\wrap}[2][]{\begingroup\setlength{\mathindent}{0pt}\nostar\parbox[t]{\linewidth}{\vspace{-3.5mm}\begin{dmath*}[#1]#2\end{dmath*}\clearpage}\endgroup}
+\newcommand{\wrap}[2][]{\)\begingroup\setlength{\mathindent}{0pt}\nostar\parbox[t]{\linewidth}{\vspace{-3.5mm}\begin{dmath*}[#1]#2\end{dmath*}\clearpage}\endgroup\skipdollar}
 % \clearpage fixes some whitespace issues
 \newcommand{\eqn}[2][3em]{
 \)\begingroup\setlength{\mathindent}{#1}\[#2\]\endgroup\(\!\!}
-\newcommand{\tabl}[2][.{lllll}.]{
+
+\newcommand{\tabl}[2][.{QQQQQ}.]{
+\begingroup
+\tabulinesep=_3pt
 \expandafter\begin{tabu}#1
 #2
-\end{tabu}\)\par\(\!\!
+\end{tabu}
+\endgroup
+\)\par\(\!\!
 }
 
 \newcommand{\mathlarge}[1]{\textrm{\footnotesize{\ensuremath{#1}}}}
@@ -74,6 +71,7 @@
 \newcommand{\gte}{\geq}
 \newcommand{\lte}{\leq}
 \newcommand{\lt}{<}
+\newcommand{\heq}{\hiderel{=}}
 \newcommand{\gt}{>}
 
 \newcommand{\abt}{\approx}
@@ -95,6 +93,7 @@
 \renewcommand{\set}[1]{{\left\{%
 #1\right\}}}
 
+% State machines
 \newcommand{\accept}{_{\textrm{\scriptsize accept}}}
 \newcommand{\reject}{_{\textrm{\scriptsize reject}}}
 
@@ -120,6 +119,7 @@
 \newcommand{\nPos}{\Not\lozenge}
 
 
+
 % Isomorphism, congruence, groups
 \newcommand{\iso}{\cong}
 \newcommand{\niso}{\not{\iso}}
@@ -133,6 +133,14 @@
 
 % Greek leters
 \newcommand{\alp}{\ensuremath{\alpha}}
+\newcommand{\bet}{\beta}
+\newcommand{\G}{\Gamma}
+\newcommand{\g}{\gamma}
+\renewcommand{\t}{\tau}
+\newcommand{\w}{\omega}
+\newcommand{\W}{\Omega}
+\newcommand{\f}{\phi}
+\newcommand{\F}{\phi}
 \newcommand{\fee}{\ensuremath{\varphi}\xspace}
 \let\oldphi\phi
 \AtBeginDocument{ % Make sure to load these after Times New Roman stuff
@@ -159,9 +167,6 @@
 \newcommand{\creq}{\asymp}
 
 % Common superscripts
-\renewcommand{\exp}[1]{\ensuremath{e^{#1}}}
-\renewcommand{\1}{^{-1}}
-\renewcommand{\2}{^{-2}}
 \newcommand{\T}{^{\,\displaystyle t}} % Transposition of a matrix
 
 % Common "roman" text in math formulae
@@ -187,10 +192,6 @@
 \newcommand{\Oh}[1]{\mathcal{O}\left(#1\right)}
 
 % Misc common symbols
-\newcommand{\G}{\Gamma}
-\newcommand{\g}{\gamma}
-\newcommand{\w}{\omega}
-\newcommand{\W}{\Omega}
 \newcommand{\Item}{\clearpage\item}
 \renewcommand{\P}[1]{\mathrm{P}(\kern-0.5pt#1)}
 \newcommand{\tri}{\triangle}
@@ -222,7 +223,7 @@
 \newcommand{\etc}[1][]{#1\ensuremath{\cdots}#1}
 
 % Brackets, braces, etc.
-\newcommand{\<}[1]{\left\langle #1 \right\rangle}
+\renewcommand{\<}[1]{\left\langle #1 \right\rangle}
 \newcommand{\bpar}[1]{\bm{(} #1 \bm{)}}
 \newcommand{\of}[1]{\del{#1}}
 
@@ -275,10 +276,15 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\C}{\mathbb{C}}
 
-% Inverses and reciprocals
+% Exponentials
+\renewcommand{\exp}[1]{\ensuremath{e^{#1}}}
+\renewcommand{\1}{^{-1}}
+\renewcommand{\2}{^{-2}}
 \newcommand{\inv}[1]{\ensuremath{\frac{1}{#1}}}
 \newcommand{\sinv}[1]{\ensuremath{\sf{1}{#1}}}
 \newcommand{\gin}[1]{\ensuremath{#1^{-1}}}
+\newcommand{\sq}[1]{\of{#1}^2}
+\newcommand{\sqq}[1]{{#1}^2}
 
 % Formal languages
 \newcommand{\lang}[1]{\set{#1}^{\star}}

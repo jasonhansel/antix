@@ -6,7 +6,10 @@
 % Common pieces of text
 \newcommand{\dst}[1][]{distinct\xspace}
 \newcommand{\htn}[1][]{Hamiltonian\xspace}
-\newcommand{\qed}[1][]{QED.\xspace}
+\ifearlybeamer
+\else
+  \newcommand{\qed}[1][]{QED.\xspace}
+\fi
 \newcommand{\alg}[1][]{algorithm\xspace}
 \newcommand{\thm}[1][]{theorem\xspace}
 \newcommand{\Thm}[1][]{Theorem\xspace}
@@ -15,6 +18,11 @@
 \newcommand{\xyzt}{x,y,z,t}
 \newcommand{\txyz}{t,x,y,z}
 \newcommand{\dxyz}{\dot x,\dot y,\dot z}
+
+\newcommand{\contd}{
+  \i{Continued on the next page}
+  \newpage
+}
 
 % Text mode symbols
 \newcommand{\tetc}{\textellipsis}

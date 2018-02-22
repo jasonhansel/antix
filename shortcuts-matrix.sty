@@ -1,21 +1,32 @@
 % Standard matrix
 
 \newcommand{\parmath}[1][]{\)\\[#1]}
-% REQUIRES forceams, which can break TikZ
+
+% Ignore the next '$'
+\ifearlybeamer
+\else
 \def\skipdollar{
-	\let\oldDollarCode$
+	\begingroup
+	\catcode`\$=\active
 	\def\newDollarCode{
-		\begingroup
-		  \lccode`\~=`\$
-		  \lowercase{\endgroup\let~}\oldDollarCode
+		\endgroup
 	}
 	\begingroup
 	  \lccode`\~=`\$
 	  \lowercase{\endgroup\let~}\newDollarCode
-	
 }
-\newcommand{\lmx}[1]{\begin{tabu}{lllllllll} #1 \end{tabu}}
-\newcommand{\mx}[1]{ \begin{tabu}({ccccccccc}) #1 \end{tabu} }
+\fi
+
+
+% https://tex.stackexchange.com/questions/12901/repeating-preamble-in-latex-tabular
+\newcolumntype{\repeat}{<{\span\doublenextamp}}
+\def\doublenextamp#1&{#1&&}
+\newcommand{\lmx}[1]{\begingroup  \begin{tabu}{l \repeat l} #1 \end{tabu} \endgroup}
+\newcommand{\mx}[1]{ \begingroup \setlength{\arraycolsep}{5pt} \begin{tabu}({
+	ccccccccc
+})
+% \multicolumn{9}{c}{} \\ \tabuphantomline 
+#1 \end{tabu} \endgroup }
 %\newcommand{\mx}[1]{ \begin{pmatrix} #1 \end{pmatrix} }
 % Matrix in square brackets
 \newcommand{\bmx}[1]{ \begin{bmatrix} #1 \end{bmatrix} }
@@ -29,6 +40,7 @@
 	\begin{smallmatrix} #1 \end{smallmatrix}
 	\hskip-2pt }
 }
+
 
 
 % \matrixpunc{...} essentially turns ";" into "\\" to make

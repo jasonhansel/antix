@@ -36,29 +36,33 @@
 
 
 % Lists
-\setlist{topsep=0pt,parsep=2ex,itemsep=0pt}
-\setlist[itemize]{label=$\bullet$}
 
 % Headings
-\titlelabel{}
-\titlespacing{\part}{0pt}{-\baselineskip}{-0.5\baselineskip}
-\titlespacing{\chapter}{0pt}{0pt}{0pt}
-\titlespacing{\section}{0pt}{0pt}{0pt}
-\titlespacing{\subsection}{0pt}{0pt}{0pt}
+\ifearlybeamer
+\else
+\setlist{topsep=0pt,parsep=2ex,itemsep=0pt}
+\setlist[itemize]{label=$\bullet$}
+    \titlelabel{}
+    \titlespacing{\part}{0pt}{-\baselineskip}{-0.5\baselineskip}
+    \titlespacing{\chapter}{0pt}{0pt}{0pt}
+    \titlespacing{\section}{0pt}{0pt}{0pt}
+    \titlespacing{\subsection}{0pt}{0pt}{0pt}
 
-% Fix "thetitle" - see http://tex.stackexchange.com/questions/3988/
-\let\oldtitle\title
-\renewcommand{\title}[1]{\oldtitle{#1}\newcommand{\mythetitle}{#1}}
+    % Fix "thetitle" - see http://tex.stackexchange.com/questions/3988/
+    \let\oldtitle\title
+    \renewcommand{\title}[1]{\oldtitle{#1}\newcommand{\mythetitle}{#1}}
 
-% Fix chapters
-\titleclass{\chapter}{straight}[\part]
-\newcounter{chapter}
-\renewcommand{\thechapter}{}
-\renewcommand{\chaptertitlename}{}
-\titleformat{\chapter}[hang]{}{}{0pt}{\textbf}[]
-\newcommand{\bbf}[1]{\textbf{#1}}
-\titleformat{\part}[block]{}{}{0pt}{\bbf}
-\titleformat{\section}[runin]{}{}{0pt}{\u}[\enspace]
+    % Fix chapters
+    \titleclass{\chapter}{straight}[\part]
+    \newcounter{chapter}
+    \renewcommand{\thechapter}{}
+    \renewcommand{\chaptertitlename}{}
+    \titleformat{\chapter}[hang]{}{}{0pt}{\textbf}[]
+    \newcommand{\bbf}[1]{\textbf{#1}}
+    \titleformat{\part}[block]{}{}{0pt}{\bbf}
+
+    \titleformat{\section}[runin]{}{}{0pt}{\u}[\enspace]
+\fi
 
 
 
