@@ -28,8 +28,8 @@
 \newcommand{\tetc}{\textellipsis}
 
 % Text formatting
-\renewcommand{\b}{\textbf}
-\newcommand{\boldcompact}[1]{\fontseries{b}\selectfont #1}
+\newcommand{\bx}[1]{\textbf{#1}}
+\renewcommand{\b}[1]{{\fontseries{b}\selectfont #1}}
 \renewcommand{\i}{\textit}
 \newcommand{\hi}{\hangindent=0.7cm}
 \newcommand{\sub}{\textsubscript}
@@ -59,6 +59,7 @@
 \newcommand{\thr}{\medskip\hrule} % Space before only
 \newcommand{\hr}{\par\vspace{5pt}\hrule\vspace{5pt}\par} % Page-wide
 \newcommand{\chr}{\par\hspace{-0.5\columnsep}\lineaddrule{\linewidth + \columnsep}\\\vspace{-\baselineskip}}  % Column-wide
+\newcommand{\chhr}{\vspace{-\baselineskip}\vspace{3pt}\par\hspace{-0.5\columnsep}\lineaddrule{\linewidth + \columnsep}\\\vspace{-\baselineskip}}  % Column-wide
 \renewcommand{\cbr}{\chr\columnbreak\chr}  % Column-wide
 
 % Misc symbols (also for use in math mode)

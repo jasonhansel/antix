@@ -34,6 +34,11 @@
 \tikzset{cell/.style={minimum size=0.5cm, draw=black, line width=1pt,
  text height=0.25cm,text width=0.25cm,text centered}}{}
 
+% single space blockquotes
+\renewenvironment{quote}
+               {\setlength{\parindent}{0pt}\begin{addmargin}[4em]{0em}\begin{singlespace}}
+               {\end{singlespace}\end{addmargin}}
+
 
 % Lists
 

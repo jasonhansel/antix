@@ -9,7 +9,7 @@
 % variety of uses.
 
 % Prologue
-\ProvidesClass{hw-beamer}[2015/10/18 Homework]
+\ProvidesClass{hw}[2015/10/18 Homework]
 \NeedsTeXFormat{LaTeX2e}
 
 
@@ -29,24 +29,23 @@
 \makeatletter
 \XKV@useoption{beamer}
 \define@boolkey{early}[early]{beamer}{}
+\define@boolkey{early}[early]{chicago}{}
 \makeatother
-\presetkeys{early}{fontsize=12pt,beamer=false}{}
+\presetkeys{early}{fontsize=12pt,beamer=false,chicago=false}{}
 
-\DeclareOption{beamer}
 
 \ProcessOptionsX<early>
-\makeatletter
-\ifearlybeamer
-  \def\@classoptionslist{X}
-  \LoadClass[usepdftitle=false]{beamer}
+
+\LoadClass[fleqn]{article}  
+\RequirePackage[letterpaper]{geometry} % Page margins
+\RequirePackage[table,svgnames]{xcolor} % Color presets
+\RequirePackage{titling}
+\RequirePackage[tiny, rigidchapters, bf, pagestyles]{titlesec}
+
+\ifearlychicago
+      \RequirePackage[backend=biber,notes,hyperref=false,doi=false,eprint=false]{biblatex-chicago}  
 \else
-  \LoadClass[fleqn]{article}  
-  \RequirePackage[letterpaper]{geometry} % Page margins
-  \RequirePackage[table,svgnames]{xcolor} % Color presets
-  \RequirePackage{titling}
-  \RequirePackage[tiny, rigidchapters, bf, pagestyles]{titlesec}
   \RequirePackage[backend=biber,style=mla,hyperref=false,showmedium=false,doi=false]{biblatex}
 \fi
-\makeatother
 
 \RequirePackage{hw-deps}

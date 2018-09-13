@@ -97,3 +97,14 @@
 \newcommand{\dpt}[1]{\mx{\matrixpunc{#1}}}
 \newcommand{\fmx}[1]{\matrixpunc{\mx{#1}}}
 \newcommand{\flmx}[1]{\parmath[-\baselineskip]\(\matrixpunc{\lmx{#1}}\parmath[0pt]\skipdollar}
+
+\DeclareDocumentCommand{\tabl}{  O{3em} O{.{QQQQQ}.} m }{
+\)\par\hspace{#1}\(\!\!
+\begingroup
+\tabulinesep=_3pt
+\expandafter\begin{tabu}#2
+#3
+\end{tabu}
+\endgroup
+\)\par\(\!\!
+}

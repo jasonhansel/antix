@@ -1,10 +1,6 @@
 
 
 
-
-\newcommand{\dfff}{\mathrm{d}}
-\newcommand{\dfs}{{\!\hiderel{\wedge}\!\dfff}}
-
 % Differential forms
 \RequirePackage{gtl}
 \ExplSyntaxOn
@@ -14,7 +10,7 @@
     \tl_set:Nn \l_demo_tl {#1}
     \seq_gclear:c {l_seq}
     \regex_extract_all:nnNTF {(?:.(?:_.|_\{.*?\}|)|\{.*?\{.*?\}.*?\})\s*} {#1} \l_seq {
-        \dfff\seq_use:Nnnn \l_seq {\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}{\!\hiderel{\wedge}\!\dfff}
+        \X\seq_use:Nnnn \l_seq {\!\hiderel{\wedge}\!\X}{\!\hiderel{\wedge}\!\X}{\!\hiderel{\wedge}\!\X}
     }{fail}
 }
 \ExplSyntaxOff
@@ -47,18 +43,10 @@
 % Shortcuts for typesetting math
 \newcommand{\wrap}[2][]{\)\begingroup\setlength{\mathindent}{0pt}\nostar\parbox[t]{\linewidth}{\vspace{-3.5mm}\begin{dmath*}[#1]#2\end{dmath*}\clearpage}\endgroup\skipdollar}
 % \clearpage fixes some whitespace issues
-\newcommand{\eqn}[2][3em]{
-\)\begingroup\setlength{\mathindent}{#1}\[#2\]\endgroup\(\!\!}
+\newcommand{\eqn}[2][3em]{\)\begingroup\setlength{\mathindent}{#1}\[#2\]\endgroup\(\!\!}
+\newcommand{\ieqn}[1]{\displaystyle{#1}}
 
-\newcommand{\tabl}[2][.{QQQQQ}.]{
-\begingroup
-\tabulinesep=_3pt
-\expandafter\begin{tabu}#1
-#2
-\end{tabu}
-\endgroup
-\)\par\(\!\!
-}
+
 
 \newcommand{\mathlarge}[1]{\textrm{\footnotesize{\ensuremath{#1}}}}
 \newcommand{\textrmq}[1]{\ensuremath{\noqmark\textrm{#1}\reqmark}}
@@ -74,8 +62,6 @@
 \newcommand{\heq}{\hiderel{=}}
 \newcommand{\gt}{>}
 
-\newcommand{\abt}{\approx}
-
 % Sets
 \newcommand{\nin}{\notin}
 \newcommand{\unin}{\cup}
@@ -89,9 +75,7 @@
 \newcommand{\sz}{\abs}
 \newcommand{\except}{\setminus}
 \newcommand{\mt}{\varnothing}
-
-\renewcommand{\set}[1]{{\left\{%
-#1\right\}}}
+\renewcommand{\set}[1]{{\left\{#1\right\}}}
 
 % State machines
 \newcommand{\accept}{_{\textrm{\scriptsize accept}}}
@@ -131,22 +115,22 @@
 % Complex numbers.
 \newcommand{\conj}{\overline}
 
-% Greek leters
-\newcommand{\alp}{\ensuremath{\alpha}}
-\newcommand{\bet}{\beta}
-\newcommand{\G}{\Gamma}
-\newcommand{\g}{\gamma}
-\renewcommand{\t}{\tau}
-\newcommand{\w}{\omega}
-\newcommand{\W}{\Omega}
-\newcommand{\f}{\phi}
-\newcommand{\F}{\phi}
-\newcommand{\fee}{\ensuremath{\varphi}\xspace}
-\let\oldphi\phi
+% Greek leters - now using alphabeta instead
+% \newcommand{\alp}{\ensuremath{\alpha}}
+% \newcommand{\bet}{\beta}
+% \newcommand{\G}{\Gamma}
+% \newcommand{\g}{\gamma}
+% \renewcommand{\t}{\tau}
+% \newcommand{\w}{\omega}
+% \newcommand{\W}{\Omega}
+% \newcommand{\f}{\phi}
+% \newcommand{\F}{\phi}
+% \newcommand{\fee}{\ensuremath{\varphi}\xspace}
+% \let\oldphi\phi
 \AtBeginDocument{ % Make sure to load these after Times New Roman stuff
 	\renewcommand{\^}{\wedge}
-	\renewcommand{\l}{\lambda}
-	\renewcommand{\phi}[1][]{\ifthenelse{\equal{#1}{}}{\oldphi}{\oldphi(#1)}}
+	% \renewcommand{\l}{\lambda}
+	% \renewcommand{\phi}[1][]{\ifthenelse{\equal{#1}{}}{\oldphi}{\oldphi(#1)}}
 }
 
 
@@ -204,6 +188,7 @@
 \newcommand{\bz}{\bm{0}}
 \newcommand{\chk}{\ensuremath{\checkmark}}
 \renewcommand{\tilde}{\ensuremath{\raise.18ex\hbox{$\scriptstyle\sim$}}}
+\newcommand{\hov}{\overline{h}}
 
 % Various uses of vertical bars
 \newcommand{\given}{\mathpunct{\mid}}
@@ -224,8 +209,8 @@
 
 % Brackets, braces, etc.
 \renewcommand{\<}[1]{\left\langle #1 \right\rangle}
-\newcommand{\bpar}[1]{\bm{(} #1 \bm{)}}
-\newcommand{\of}[1]{\del{#1}}
+\newcommand{\bof}[1]{\bm{(} #1 \bm{)}}
+\newcommand{\of}[2][]{#1\del{#2}}
 
 
 % Fractions and radicals
@@ -294,4 +279,4 @@
 \renewcommand{\H}{\mathscr{H}}
 
 % Misc
-\newcommand{\alc}{\conj{\alp}}
+% \newcommand{\alc}{\conj{\alp}}
