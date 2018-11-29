@@ -27,6 +27,7 @@
 \makeatletter
 \XKV@useoption{beamer}
 \define@boolkey{early}[early]{beamer}{}
+\define@boolkey{early}[early]{chicago}{}
 \makeatother
 \presetkeys{early}{fontsize=12pt,beamer=true}{}
 

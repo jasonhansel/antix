@@ -6,6 +6,7 @@
 \RequirePackage{drac} % Easy 'active' characters
 
 
+\RequirePackage[calc,english]{datetime2}
 
 
 \RequirePackage{xstring} % String manipulation
@@ -14,6 +15,8 @@
 
 \RequirePackage{xspace} % Macros that preserve spacing
 \RequirePackage{newunicodechar}
+\RequirePackage{pgfornament}
+\RequirePackage{changepage}
 
 % Math, symbols, etc.
 \RequirePackage{amssymb} % Useful symbols
@@ -30,15 +33,42 @@
 
 
 % Typography
+
+
 \usepackage{scrextend} % for blocquotes
 \RequirePackage{lineno}
-\RequirePackage[english]{babel} % Multilingual tools
-\RequirePackage[autostyle, english=american, parthreshold=true, strict=true]{csquotes} % Quotations
+\RequirePackage{substitutefont}
+\RequirePackage{environ}
+
+% \RequirePackage[bgreek,greek,ibygreek, main=english, math=normal]{babel} % Multilingual tools
+\RequirePackage[greek, main=english, math=normal]{babel} % Multilingual tools
+% \babelprovide[hyphenrules=+]{bgreek}
+% \babelprovide[hyphenrules=+]{ibygreek}
+
+% \makeatletter
+% \addto\extrasibygreek{\bbl@activate{!}}
+% \addto\noextrasibygreek{\bbl@activate{!}}
+% \makeatother
+
+\RequirePackage[autostyle, english=american, parthreshold, strict=true, threshold=1]{csquotes} % Quotations
+
+
+\ifearlychicago
+  \RequirePackage[backend=biber,notes,hyperref=false,doi=false,eprint=false]{biblatex-chicago}  
+\else
+  \RequirePackage[backend=biber,style=mla,url=true,hyperref=false,noremoteinfo=false, language=english, block=ragged]{biblatex}
+\fi
+
+
 \makeatletter
 %Remove \do\' from the list of reserved chars
 \def\csq@resrvdchars{\do\9}
 \makeatother
+
 \RequirePackage{pbox}
+\RequirePackage{mdframed}
+\RequirePackage{tabularx}
+\RequirePackage{tabularht}
 \RequirePackage{ragged2e} % Non-justified text
 \RequirePackage{setspace} % Better line spacing
 \RequirePackage{soul} % Nice underlining
@@ -313,7 +343,68 @@
 
 
 
+\DeclareOptionX<late>{resume}{\AtEndOfClass{
+  % Typography
+\usepackage[scaled=1.0]{inconsolata}
+\AtBeginDocument{\figureversion{tab}}
 
+% Fix conversion to text
+\input glyphtounicode
+\pdfmapline{+dummy-space <dummy-space.pfb}
+\pdfglyphtounicode{space}{0020}
+\pdfgentounicode=1
+\pdfadjustspacing=0
+\pdfadjustinterwordglue=0
+\pdfinterwordspaceon
+
+% Headings
+\titleformat{\chapter}[runin]{}{}{0pt}{\Huge}
+\titleformat{\section}[block]{}{}{0pt}{\\[-\baselineskip]\Large\textbf}
+\titleformat{\subsection}[block]{}{}{0pt}{\\[-\baselineskip]} % So parsers see the newline
+\titlespacing{\section}{0pt}{0pt plus 3fil}{0pt plus 3fil}
+\titlespacing{\subsection}{0pt}{0pt plus 3fil}{0pt}
+
+% Spacing
+\geometry{noheadfoot}
+\setlist{partopsep=0pt,topsep=0pt,itemsep=0pt,parsep=0pt,leftmargin=0pt,rightmargin=0pt}
+\setlength{\parfillskip}{0pt plus 1fil} % Fix end-of-line spacing
+\AtBeginDocument{\setlength{\baselineskip}{14pt plus 2fil}}
+\flushbottom
+}}
+\DeclareOptionX<late>{coverletter}{\AtEndOfClass{
+% Typography
+\usepackage[scaled=1.0]{inconsolata}
+\AtBeginDocument{\figureversion{tab}}
+
+% Fix conversion to text
+\input glyphtounicode
+\pdfmapline{+dummy-space <dummy-space.pfb}
+\pdfglyphtounicode{space}{0020}
+\pdfgentounicode=1
+\pdfadjustspacing=0
+\pdfadjustinterwordglue=0
+\pdfinterwordspaceon
+
+% Headings
+\titleformat{\chapter}[runin]{}{}{0pt}{\Huge}
+\titleformat{\section}[block]{}{}{0pt}{\\[-\baselineskip]\Large\textbf}
+\titleformat{\subsection}[block]{}{}{0pt}{\\[-\baselineskip]} % So parsers see the newline
+\titlespacing{\section}{0pt}{0pt plus 3fil}{0pt plus 3fil}
+\titlespacing{\subsection}{0pt}{0pt plus 3fil}{0pt}
+
+% Spacing
+\geometry{noheadfoot}
+\setlist{partopsep=0pt,topsep=0pt,itemsep=0pt,parsep=0pt,leftmargin=0pt,rightmargin=0pt}
+\setlength{\parfillskip}{0pt} % Fix end-of-line spacing
+\AtBeginDocument{\setlength{\baselineskip}{14pt plus 2fil}}
+\flushbottom
+
+
+\setlength{\parfillskip}{0pt plus 1fil} % Fix end-f-line spacing
+\addtolength{\baselineskip}{0pt plus 1fil}
+\setlength{\parindent}{3em}
+\setlength{\parskip}{0.5\baselineskip}
+}}
 
 \DeclareOptionX<late>{fontface}{\AtEndOfClass{
     \IfEqCase{#1}{
@@ -322,8 +413,15 @@
     \renewcommand{\bfdefault}{b} % Actually this fixes log issues
     \renewcommand{\b}{\textbf}
     \renewcommand{\i}{\textit}
+    % \substitutefont{BCG}{\rmdefault}{cmr}
+
      }
-        {minion}{ \RequirePackage[onlytext,textlf]{MinionPro} }
+        {minion}{
+
+          \usepackage[]{microtype}
+          \RequirePackage[onlytext,normalsize,lf]{MinionPro}
+          \renewcommand{\bfdefault}{b}
+         }
     }
 }}
 
