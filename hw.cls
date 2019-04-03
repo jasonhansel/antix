@@ -17,44 +17,57 @@
 \RequirePackage[utf8]{inputenc} % UTF8 support
 
 
-\RequirePackage{lmodern} % Improved Computer Modern font
 \usepackage{alphabeta}
 % Useful tools
 \RequirePackage{xkeyval} % DeclareOption but with key-value syntax
 
+\RequirePackage{etoolbox}
+
 % NB: for ancient greek must do fmtutil --all -user after making new language dat files
 
 % Include "article.cls"; fontsize option must be processed early
-\DeclareOptionX<early>{fontsize}{ \PassOptionsToClass{#1}{article}
-  \PassOptionsToClass{#1}{beamer}  }
-\XKV@useoption{beamer}
-\makeatletter
-\XKV@useoption{beamer}
-\define@boolkey{early}[early]{beamer}{}
-\define@boolkey{early}[early]{chicago}{}
-\makeatother
-\presetkeys{early}{fontsize=12pt,beamer=false,chicago=false}{}
+\newtoggle{twelve}
+\newtoggle{earlybeamer}
+\newtoggle{earlychicago}
+\newtoggle{earlythesis}
+\global\togglefalse{twelve}
+\global\togglefalse{earlybeamer}
+\global\togglefalse{earlychicago}
+\global\togglefalse{earlythesis}
 
+
+
+% \DeclareOptionX<early>{font-size}{
+%   \AtBeginDocument{\changefontsizes{#1}}
+%  }
+
+\makeatletter
+\define@boolkey{early}[early]{beamer}{\global\settoggle{earlybeamer}{#1}}
+\define@boolkey{early}[early]{thesis}{\global\settoggle{earlythesis}{#1}}
+\define@boolkey{early}[early]{chicago}{\global\settoggle{earlychicago}{#1}}
+\presetkeys{early}{beamer=false,chicago=false,thesis=false}{}
 
 \ProcessOptionsX<early>
-\ifearlybeamer
+
+\makeatother
+
+
+
+\iftoggle{earlybeamer}{
   \def\@classoptionslist{X}
   \RequirePackage[T1]{fontenc}
   \LoadClass[usepdftitle=false]{beamer}
-\else
-    \RequirePackage[BCQ,LGR,T3,T1,OT1]{fontenc} % Modern fonts
-    \LoadClass[fleqn]{article}  
+}{
+    \RequirePackage[BCQ,T1]{fontenc} % Modern fonts
+    \LoadClass[fleqn,12pt]{article}  
     \RequirePackage[letterpaper]{geometry} % Page margins
     \RequirePackage[table,svgnames]{xcolor} % Color presets
     \RequirePackage{titling}
-    \RequirePackage[tiny, rigidchapters, bf, pagestyles]{titlesec}
-\fi
+    \RequirePackage[tiny, bf, pagestyles, compact]{titlesec}
+}
 
 
-% \RequirePackage[backend=biber,style=mla]{biblatex}
-% \ifearlychicago
-%       \RequirePackage[backend=biber,notes,hyperref=false,doi=false,eprint=false]{biblatex-chicago}  
-% \else
-% \fi
+\RequirePackage[fontsize=12]{scrextend} % for blockquotes; nb iss with font sizes
+
 
 \RequirePackage{hw-deps}

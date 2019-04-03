@@ -1,5 +1,8 @@
 
 
+\def\magicitem #1.{\ifblank{#1}{\item[]}{\item[#1.]}}
+\newcommand{\tm}{\item}
+
 \newcommand{\Prob}[1]{\clearpage\textbf{#1}\par}
 \newcommand{\prob}[1]{\par\pagebreak[2]\textbf{#1}\\*}
 

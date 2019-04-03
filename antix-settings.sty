@@ -47,6 +47,13 @@
 \else
 \setlist{topsep=0pt,parsep=2ex,itemsep=0pt}
 \setlist[itemize]{label=$\bullet$}
+
+
+    % Fix chapters
+    \titleclass{\part}{straight}
+    \titleclass{\chapter}{straight}[\part]
+
+    
     \titlelabel{}
     \titlespacing{\part}{0pt}{-\baselineskip}{-0.5\baselineskip}
     \titlespacing{\chapter}{0pt}{0pt}{0pt}
@@ -57,14 +64,16 @@
     \let\oldtitle\title
     \renewcommand{\title}[1]{\oldtitle{#1}\newcommand{\mythetitle}{#1}}
 
-    % Fix chapters
-    \titleclass{\chapter}{straight}[\part]
+
     \newcounter{chapter}
-    \renewcommand{\thechapter}{}
+    % \renewcommand{\thechapter}{}
     \renewcommand{\chaptertitlename}{}
-    \titleformat{\chapter}[hang]{}{}{0pt}{\textbf}[]
+
+    \titleformat{\chapter}[block]{}{}{0pt}{\textbf}
+    \titleformat{\part}[block]{\vspace{-\baselineskip}}{}{0pt}{\textbf}[]
+    
     \newcommand{\bbf}[1]{\textbf{#1}}
-    \titleformat{\part}[block]{}{}{0pt}{\bbf}
+    \titlespacing{\part}{0pt}{0pt}{0pt}
 
     \titleformat{\section}[runin]{}{}{0pt}{\u}[\enspace]
 \fi
@@ -73,3 +82,8 @@
 
 % Improve tikz-cd arrows
 \tikzcdset{every arrow/.append style = -{Latex[scale=1.25]}}
+
+% Better spacing
+\frenchspacing
+
+

@@ -46,12 +46,8 @@
 \newcommand{\eqn}[2][3em]{\)\begingroup\setlength{\mathindent}{#1}\[#2\]\endgroup\(\!\!}
 \newcommand{\ieqn}[1]{\displaystyle{#1}}
 
-
-
 \newcommand{\mathlarge}[1]{\textrm{\footnotesize{\ensuremath{#1}}}}
 \newcommand{\textrmq}[1]{\ensuremath{\noqmark\textrm{#1}\reqmark}}
-%\let\olddot\dot
-%\renewcommand{\dot}[1][]{\olddot #1}
 
 % MATH SHORTCUTS
 
@@ -115,22 +111,9 @@
 % Complex numbers.
 \newcommand{\conj}{\overline}
 
-% Greek leters - now using alphabeta instead
-% \newcommand{\alp}{\ensuremath{\alpha}}
-% \newcommand{\bet}{\beta}
-% \newcommand{\G}{\Gamma}
-% \newcommand{\g}{\gamma}
-% \renewcommand{\t}{\tau}
-% \newcommand{\w}{\omega}
-% \newcommand{\W}{\Omega}
-% \newcommand{\f}{\phi}
-% \newcommand{\F}{\phi}
-% \newcommand{\fee}{\ensuremath{\varphi}\xspace}
-% \let\oldphi\phi
+% Greek leters - now using key shortcuts instead
 \AtBeginDocument{ % Make sure to load these after Times New Roman stuff
 	\renewcommand{\^}{\wedge}
-	% \renewcommand{\l}{\lambda}
-	% \renewcommand{\phi}[1][]{\ifthenelse{\equal{#1}{}}{\oldphi}{\oldphi(#1)}}
 }
 
 
@@ -253,7 +236,6 @@
 \newcommand{\mathsc}[1]{\text{\normalfont\scshape#1}}
 	% See http://tex.stackexchange.com/questions/13040/
 
-
 % Common sets of numbers
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\R}{\mathbb{R}}
@@ -278,5 +260,13 @@
 \renewcommand{\S}{\mathscr{S}}
 \renewcommand{\H}{\mathscr{H}}
 
-% Misc
-% \newcommand{\alc}{\conj{\alp}}
+% Gravity
+\newcommand{\Cp}[2]{{#2}^{\prime #1}}
+\newcommand{\Ch}[2]{{#2}^{\hat #1}}
+\newcommand{\E}[1]{{\mathbf{e}}_{{#1}}}
+\newcommand{\Ep}[1]{{\mathbf{e}}_{\prime {#1}}}
+\newcommand{\Eh}[1]{{\mathbf{e}}_{\hat {#1}}}
+\newcommand{\G}[1]{g_{#1}}
+\newcommand{\Gp}[1]{g'_{#1}}
+\newcommand{\TMR}{1 - \frac{2M}{R}}
+\newcommand{\oTMR}{\of{1 - \frac{2M}{R}}}

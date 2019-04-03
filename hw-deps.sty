@@ -30,12 +30,16 @@
 \RequirePackage{scalerel}
 
 
+\RequirePackage[ragged]{footmisc}
+
+
 
 
 % Typography
 
 
-\usepackage{scrextend} % for blocquotes
+\RequirePackage{lmodern}
+
 \RequirePackage{lineno}
 \RequirePackage{substitutefont}
 \RequirePackage{environ}
@@ -52,13 +56,18 @@
 
 \RequirePackage[autostyle, english=american, parthreshold, strict=true, threshold=1]{csquotes} % Quotations
 
-
-\ifearlychicago
-  \RequirePackage[backend=biber,notes,hyperref=false,doi=false,eprint=false]{biblatex-chicago}  
-\else
-  \RequirePackage[backend=biber,style=mla,url=true,hyperref=false,noremoteinfo=false, language=english, block=ragged]{biblatex}
-\fi
-
+\iftoggle{earlythesis}{
+      \RequirePackage[backend=biber,style=mla,url=true,hyperref=false,noremoteinfo=false, language=english, block=ragged]{biblatex}
+      % , idemtracker=false,
+      % uniquename=false,singletitle=false
+      \ExecuteBibliographyOptions{uniquename=false}
+}{
+  \ifearlychicago
+    \RequirePackage[backend=biber,notes,hyperref=false,doi=false,eprint=false]{biblatex-chicago}  
+  \else
+    \RequirePackage[backend=biber,style=mla,url=true,hyperref=false,noremoteinfo=false, language=english, block=ragged]{biblatex}
+  \fi
+}
 
 \makeatletter
 %Remove \do\' from the list of reserved chars
@@ -148,6 +157,7 @@
 
 % Bibliography
 \newcommand{\ci}{\autocite}
+\newcommand{\cis}{\autocites}
 \newcommand{\cna}{\autocite*} % Omit author
 \newcommand{\cnp}{\cite} % Omit parens
 \newcommand{\cnap}{\cite*} % Omit parens and author
@@ -199,8 +209,21 @@
 \newcolumntype{Q}{>{\displaystyle}l} % math-mode version of "l" column type
 \newcolumntype{R}{>{$}r<{$}} % math-mode version of "l" column type
 
+\iftoggle{earlythesis}{
+  \SetCiteCommand{\parencite}
+  \renewcommand{\mkbegdispquote}[2]{\citereset\openautoquote}
+  \renewcommand{\mkenddispquote}[2]{\closeautoquote#1#2}
 
+  \newcommand{\partbreak}{\clearpage}
+  
+  \renewcommand{\thepart}{\arabic{part}}
+  \titleformat{\part}[block]{\textbf{Part \thepart: }}{}{0pt}{\bfc}[]
+  \titlespacing{\part}{0pt}{0pt}{0pt}
+  \titleformat{\chapter}[block]{\textbf{\thepart.\thechapter.} }{}{0pt}{\b}
+  \counterwithin*{section}{chapter}
+  \titleformat{\section}[block]{\ul{\thepart.\thechapter.\thesection. }}{}{0pt}{\ul}
 
+}
 % Allow right-aligned cases in math mode
 % http://tex.stackexchange.com/questions/27520/
 \makeatletter
@@ -323,10 +346,8 @@
     \raggedright % Actually, ragged2e isn't very good
 }
 
-\DeclareOptionX<late>{parindent}{
-    \setlength{\parindent}{3em}
-    \setlength{\parskip}{0em}
-}
+
+
 
 \DeclareOptionX<late>{nohyphen}{
     %  May need to set "emergencystretch" to avoid line-break issues.
@@ -338,91 +359,102 @@
 \DeclareOptionX<late>{noskip}{
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0em}
+    \AtBeginDocument{
+      \setlist{itemsep=0pt,parsep=0pt}
+    }
 }
 
 
 
 
 \DeclareOptionX<late>{resume}{\AtEndOfClass{
-  % Typography
-\usepackage[scaled=1.0]{inconsolata}
-\AtBeginDocument{\figureversion{tab}}
+      % Typography
+    \usepackage[scaled=1.0]{inconsolata}
+    \AtBeginDocument{\figureversion{tab}}
 
-% Fix conversion to text
-\input glyphtounicode
-\pdfmapline{+dummy-space <dummy-space.pfb}
-\pdfglyphtounicode{space}{0020}
-\pdfgentounicode=1
-\pdfadjustspacing=0
-\pdfadjustinterwordglue=0
-\pdfinterwordspaceon
+    % Fix conversion to text
+    \input glyphtounicode
+    \pdfmapline{+dummy-space <dummy-space.pfb}
+    \pdfglyphtounicode{space}{0020}
+    \pdfgentounicode=1
+    \pdfadjustspacing=0
+    \pdfadjustinterwordglue=0
+    \pdfinterwordspaceon
 
-% Headings
-\titleformat{\chapter}[runin]{}{}{0pt}{\Huge}
-\titleformat{\section}[block]{}{}{0pt}{\\[-\baselineskip]\Large\textbf}
-\titleformat{\subsection}[block]{}{}{0pt}{\\[-\baselineskip]} % So parsers see the newline
-\titlespacing{\section}{0pt}{0pt plus 3fil}{0pt plus 3fil}
-\titlespacing{\subsection}{0pt}{0pt plus 3fil}{0pt}
+    % Headings
+    \titleformat{\chapter}[runin]{}{}{0pt}{\Huge}
+    \titleformat{\section}[block]{}{}{0pt}{\\[-\baselineskip]\Large\textbf}
+    \titleformat{\subsection}[block]{}{}{0pt}{\\[-\baselineskip]} % So parsers see the newline
+    \titlespacing{\section}{0pt}{0pt plus 3fil}{0pt plus 3fil}
+    \titlespacing{\subsection}{0pt}{0pt plus 3fil}{0pt}
 
-% Spacing
-\geometry{noheadfoot}
-\setlist{partopsep=0pt,topsep=0pt,itemsep=0pt,parsep=0pt,leftmargin=0pt,rightmargin=0pt}
-\setlength{\parfillskip}{0pt plus 1fil} % Fix end-of-line spacing
-\AtBeginDocument{\setlength{\baselineskip}{14pt plus 2fil}}
-\flushbottom
+    % Spacing
+    \geometry{noheadfoot}
+    \setlist{partopsep=0pt,topsep=0pt,itemsep=0pt,parsep=0pt,leftmargin=0pt,rightmargin=0pt}
+    \setlength{\parfillskip}{0pt plus 1fil} % Fix end-of-line spacing
+    \AtBeginDocument{\setlength{\baselineskip}{14pt plus 2fil}}
+    \flushbottom
 }}
 \DeclareOptionX<late>{coverletter}{\AtEndOfClass{
-% Typography
-\usepackage[scaled=1.0]{inconsolata}
-\AtBeginDocument{\figureversion{tab}}
+    % Typography
+    \usepackage[scaled=1.0]{inconsolata}
+    \AtBeginDocument{\figureversion{tab}}
 
-% Fix conversion to text
-\input glyphtounicode
-\pdfmapline{+dummy-space <dummy-space.pfb}
-\pdfglyphtounicode{space}{0020}
-\pdfgentounicode=1
-\pdfadjustspacing=0
-\pdfadjustinterwordglue=0
-\pdfinterwordspaceon
+    % Fix conversion to text
+    \input glyphtounicode
+    \pdfmapline{+dummy-space <dummy-space.pfb}
+    \pdfglyphtounicode{space}{0020}
+    \pdfgentounicode=1
+    \pdfadjustspacing=0
+    \pdfadjustinterwordglue=0
+    \pdfinterwordspaceon
 
-% Headings
-\titleformat{\chapter}[runin]{}{}{0pt}{\Huge}
-\titleformat{\section}[block]{}{}{0pt}{\\[-\baselineskip]\Large\textbf}
-\titleformat{\subsection}[block]{}{}{0pt}{\\[-\baselineskip]} % So parsers see the newline
-\titlespacing{\section}{0pt}{0pt plus 3fil}{0pt plus 3fil}
-\titlespacing{\subsection}{0pt}{0pt plus 3fil}{0pt}
+    % Headings
+    \titleformat{\part}[block]{}{}{0pt}{\textbf}
+    \titleformat{\chapter}[runin]{}{}{0pt}{\Huge}
+    \titleformat{\section}[block]{}{}{0pt}{\\[-\baselineskip]\Large\textbf}
+    \titleformat{\subsection}[block]{}{}{0pt}{\\[-\baselineskip]} % So parsers see the newline
+    \titlespacing{\section}{0pt}{0pt plus 3fil}{0pt plus 3fil}
+    \titlespacing{\subsection}{0pt}{0pt plus 3fil}{0pt}
 
-% Spacing
-\geometry{noheadfoot}
-\setlist{partopsep=0pt,topsep=0pt,itemsep=0pt,parsep=0pt,leftmargin=0pt,rightmargin=0pt}
-\setlength{\parfillskip}{0pt} % Fix end-of-line spacing
-\AtBeginDocument{\setlength{\baselineskip}{14pt plus 2fil}}
-\flushbottom
+    % Spacing
+    \geometry{noheadfoot}
+    \setlist{partopsep=0pt,topsep=0pt,itemsep=0pt,parsep=0pt,leftmargin=0pt,rightmargin=0pt}
+    \setlength{\parfillskip}{0pt} % Fix end-of-line spacing
+    \AtBeginDocument{\setlength{\baselineskip}{14pt plus 2fil}}
+    \flushbottom
 
 
-\setlength{\parfillskip}{0pt plus 1fil} % Fix end-f-line spacing
-\addtolength{\baselineskip}{0pt plus 1fil}
-\setlength{\parindent}{3em}
-\setlength{\parskip}{0.5\baselineskip}
+    \setlength{\parfillskip}{0pt plus 1fil} % Fix end-f-line spacing
+    \addtolength{\baselineskip}{0pt plus 1fil}
+    \setlength{\parindent}{3em}
+    \setlength{\parskip}{0.5\baselineskip}
 }}
 
 \DeclareOptionX<late>{fontface}{\AtEndOfClass{
-    \IfEqCase{#1}{
-        % Avoid always including "newtxtext" since it introduces log-parsing errors
-        {times}{ \RequirePackage{newtxtext}
-    \renewcommand{\bfdefault}{b} % Actually this fixes log issues
-    \renewcommand{\b}{\textbf}
-    \renewcommand{\i}{\textit}
-    % \substitutefont{BCG}{\rmdefault}{cmr}
-
-     }
-        {minion}{
-
-          \usepackage[]{microtype}
-          \RequirePackage[onlytext,normalsize,lf]{MinionPro}
-          \renewcommand{\bfdefault}{b}
-         }
+  \IfEqCase{#1}{        
+    {times}{
+      \RequirePackage{newtxtext}   % Create log parsing issues
+      \renewcommand{\bfdefault}{b} % Fix log parsing issues
+      \renewcommand{\b}{\textbf}
+      \renewcommand{\i}{\textit}
+      \AtBeginDocument{
+        \substitutefont{LGR}{\rmdefault}{Tempora-TLF}
+        \substitutefont{BCQ}{\rmdefault}{Tempora-TLF}
+      }
     }
+    {lmr}{
+      \AtBeginDocument{
+        \fontfamily{lmr}\selectfont
+        \renewcommand{\rmdefault}{lmr}
+      }
+    }
+    {minion}{
+      \usepackage[]{microtype}
+      \RequirePackage[onlytext,normalsize,lf]{MinionPro}
+      \renewcommand{\bfdefault}{b}
+    }
+  }
 }}
 
 \makeatletter
@@ -442,9 +474,6 @@
 \@forceamsfalse
 \DeclareOptionX<late>{forceams}{\@forceamstrue}
 \makeatother
-
-
-
 
 \DeclareOptionX<late>{lowdisplayskip}{\AtEndOfClass{
     \AtBeginDocument{
@@ -476,18 +505,18 @@
 
 \DeclareOptionX<late>{micro}{ % For review sheets
   \setlength{\columnsep}{5pt}
-\setlength{\columnseprule}{0.5pt}
-\setlength{\parskip}{0pt}
-\setlength{\mathindent}{5pt}
-\setlist[itemize]{noitemsep,leftmargin=0.7em,label=\textbullet,labelsep=0.2em}
-\setlist[itemize,2]{noitemsep,leftmargin=0.7em,label=\textbullet,labelsep=0.2em}
-\setlist[enumerate]{noitemsep,leftmargin=1em,labelsep=0.2em}
-\setlist[enumerate,2]{a),leftmargin=1.2em}
-\renewcommand\bfdefault{b}
-% \linepenalty=10000
-\hfuzz 100pt
-\emergencystretch 0pt
-\setlength{\abovedisplayskip}{0pt}
+  \setlength{\columnseprule}{0.5pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\mathindent}{5pt}
+  \setlist[itemize]{noitemsep,leftmargin=0.7em,label=\textbullet,labelsep=0.2em}
+  \setlist[itemize,2]{noitemsep,leftmargin=0.7em,label=\textbullet,labelsep=0.2em}
+  \setlist[enumerate]{noitemsep,leftmargin=1em,labelsep=0.2em}
+  \setlist[enumerate,2]{a),leftmargin=1.2em}
+  \renewcommand\bfdefault{b}
+  % \linepenalty=10000
+  \hfuzz 100pt
+  \emergencystretch 0pt
+  \setlength{\abovedisplayskip}{0pt}
   \setlength{\belowdisplayskip}{0pt}
   \setlength{\abovedisplayshortskip}{0pt}
   \setlength{\belowdisplayshortskip}{0pt} 
@@ -508,52 +537,33 @@
 }
 \makeatother
 
+
+
 \makeatletter
 \define@boolkey{late}[my@]{gravity}[false]{}
 
 \makeatother
 
+
+\DeclareOptionX<late>{parindent}{
+    \setlength{\parindent}{3em}
+    \setlength{\parskip}{0em}
+}
+
 \DeclareOption{beamer}
 
 % \ProcessOptionsX
+
 \ProcessOptionsX*<late>
-
-
-\makeatletter
-\ifmy@gravity
-  \renewcommand{\C}[2]{{#2}^{#1}}
-  \newcommand{\Cp}[2]{{#2}^{\prime #1}}
-  \newcommand{\Ch}[2]{{#2}^{\hat #1}}
-
-  \newcommand{\E}[1]{{\mathbf{e}}_{{#1}}}
-  \newcommand{\Ep}[1]{{\mathbf{e}}_{\prime {#1}}}
-  \newcommand{\Eh}[1]{{\mathbf{e}}_{\hat {#1}}}
-
-  \newcommand{\G}[1]{g_{#1}}
-  \newcommand{\Gp}[1]{g'_{#1}}
-
-  \newcommand{\TMR}{1 - \frac{2M}{R}}
-  \newcommand{\oTMR}{\of{1 - \frac{2M}{R}}}
-\fi
-\makeatother
-
-
-
-
-
-
-
 
 \renewcommand\cellalign{tl}
 \ifearlybeamer
 \else
 \setlength{\mathindent}{0pt}
-\AtEndOfClass{ % Configure csquotes; csquotes loaded late
-  
-    \MakeOuterQuote{"}
+\AtEndOfClass{ % Configure csquotes; csquotes loaded late 
+  \MakeOuterQuote{"}
   % \MakeAutoQuote{`}{'}
   \tikzset{every picture/.prefix code=\DisableQuotes} % Fix quotes in TikZ
-  
 }
 \fi
 
@@ -627,8 +637,16 @@
 \renewcommand{\del}[1]{\left(#1\right)}
 \renewcommand{\ne}{\ensuremath{\neq}}
 
-
-
+\titleformat{\part}[block]{}{}{0pt}{\textbf}[]
+\titlespacing{\part}{0pt}{0pt}{0pt}
+\iftoggle{earlythesis}{
+  \SetCiteCommand{\parencite}
+  \renewcommand{\mkbegdispquote}[2]{\citereset\openautoquote}
+  \renewcommand{\mkenddispquote}[2]{\closeautoquote#1#2}
+  \titleformat{\chapter}[block]{\textbf{\thechapter.} }{}{0pt}{\b}
+  \counterwithin*{section}{chapter}
+  \titleformat{\section}[block]{\ul{\thechapter.\thesection. }}{}{0pt}{\ul}
+}
 
 
 
