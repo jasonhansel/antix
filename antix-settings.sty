@@ -1,4 +1,5 @@
 % Load various TikZ libraries
+\iftoggle{earlygraphics}{
 \usetikzlibrary{
 	positioning,
 	matrix,
@@ -9,6 +10,13 @@
     automata,
 	calc
 }
+
+% Useful TikZ styles
+\tikzset{dot/.style={circle, fill=black}}
+\tikzset{cell/.style={minimum size=0.5cm, draw=black, line width=1pt,
+ text height=0.25cm,text width=0.25cm,text centered}}{}
+ 
+}{}
 
 % Stop xspace from adding space before quotation marks.
 % This fixes, eg, "\thm", but breaks \thm "ABC"
@@ -29,10 +37,6 @@
 \delimitershortfall=5pt
 
 
-% Useful TikZ styles
-\tikzset{dot/.style={circle, fill=black}}
-\tikzset{cell/.style={minimum size=0.5cm, draw=black, line width=1pt,
- text height=0.25cm,text width=0.25cm,text centered}}{}
 
 % single space blockquotes
 \renewenvironment{quote}
@@ -81,7 +85,9 @@
 
 
 % Improve tikz-cd arrows
-\tikzcdset{every arrow/.append style = -{Latex[scale=1.25]}}
+\iftoggle{earlygraphics}{
+    \tikzcdset{every arrow/.append style = -{Latex[scale=1.25]}}
+}{}
 
 % Better spacing
 \frenchspacing

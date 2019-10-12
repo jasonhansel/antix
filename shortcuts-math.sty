@@ -245,8 +245,14 @@
 
 % Exponentials
 \renewcommand{\exp}[1]{\ensuremath{e^{#1}}}
-\renewcommand{\1}{^{-1}}
-\renewcommand{\2}{^{-2}}
+\iftoggle{earlygraphics}{
+    \renewcommand{\1}{^{-1}}
+    \renewcommand{\2}{^{-2}}
+}{
+    \newcommand{\1}{^{-1}}
+    \newcommand{\2}{^{-2}}
+    
+}
 \newcommand{\inv}[1]{\ensuremath{\frac{1}{#1}}}
 \newcommand{\sinv}[1]{\ensuremath{\sf{1}{#1}}}
 \newcommand{\gin}[1]{\ensuremath{#1^{-1}}}

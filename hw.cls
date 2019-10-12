@@ -17,6 +17,10 @@
 \RequirePackage[utf8]{inputenc} % UTF8 support
 
 
+
+\usepackage[check-declarations]{expl3}
+
+
 \usepackage{alphabeta}
 % Useful tools
 \RequirePackage{xkeyval} % DeclareOption but with key-value syntax
@@ -30,10 +34,12 @@
 \newtoggle{earlybeamer}
 \newtoggle{earlychicago}
 \newtoggle{earlythesis}
+\newtoggle{earlygraphics}
 \global\togglefalse{twelve}
 \global\togglefalse{earlybeamer}
 \global\togglefalse{earlychicago}
 \global\togglefalse{earlythesis}
+\global\toggletrue{earlygraphics}
 
 
 
@@ -45,7 +51,8 @@
 \define@boolkey{early}[early]{beamer}{\global\settoggle{earlybeamer}{#1}}
 \define@boolkey{early}[early]{thesis}{\global\settoggle{earlythesis}{#1}}
 \define@boolkey{early}[early]{chicago}{\global\settoggle{earlychicago}{#1}}
-\presetkeys{early}{beamer=false,chicago=false,thesis=false}{}
+\define@boolkey{early}[early]{graphics}{\global\settoggle{earlygraphics}{#1}}
+% \presetkeys{early}{beamer=false,chicago=false,thesis=false,graphics=true}{}
 
 \ProcessOptionsX<early>
 
@@ -64,6 +71,7 @@
     \RequirePackage[table,svgnames]{xcolor} % Color presets
     \RequirePackage{titling}
     \RequirePackage[tiny, bf, pagestyles, compact]{titlesec}
+    \RequirePackage{titletoc}
 }
 
 

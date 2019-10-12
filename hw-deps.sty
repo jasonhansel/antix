@@ -1,4 +1,5 @@
 
+\pdfresettimer
 
 % Prevent clash with timesnewroman
 \RequirePackage[full]{textcomp}
@@ -15,7 +16,6 @@
 
 \RequirePackage{xspace} % Macros that preserve spacing
 \RequirePackage{newunicodechar}
-\RequirePackage{pgfornament}
 \RequirePackage{changepage}
 
 % Math, symbols, etc.
@@ -39,7 +39,6 @@
 
 
 \RequirePackage{lmodern}
-
 \RequirePackage{lineno}
 \RequirePackage{substitutefont}
 \RequirePackage{environ}
@@ -58,9 +57,10 @@
 
 \iftoggle{earlythesis}{
       \RequirePackage[backend=biber,style=mla,url=true,hyperref=false,noremoteinfo=false, language=english, block=ragged]{biblatex}
+      % \RequirePackage[backend=biber,notes,hyperref=false,doi=false,eprint=false]{biblatex-chicago}  
       % , idemtracker=false,
       % uniquename=false,singletitle=false
-      \ExecuteBibliographyOptions{uniquename=false}
+      % \ExecuteBibliographyOptions{uniquename=false}
 }{
   \ifearlychicago
     \RequirePackage[backend=biber,notes,hyperref=false,doi=false,eprint=false]{biblatex-chicago}  
@@ -68,6 +68,9 @@
     \RequirePackage[backend=biber,style=mla,url=true,hyperref=false,noremoteinfo=false, language=english, block=ragged]{biblatex}
   \fi
 }
+
+
+
 
 \makeatletter
 %Remove \do\' from the list of reserved chars
@@ -93,23 +96,39 @@
 \RequirePackage{multicol} % Multi-column text
 \RequirePackage{parcolumns} % Parallel columns
 
+
+
+
 % Boxes and frames
 \RequirePackage{tcolorbox} % Colorful boxes
 \RequirePackage[export]{adjustbox} % Transform text boxes
 \RequirePackage{framed} % Better framed/shaded regions
 
-% Graphics
-\RequirePackage{tikz} % General diagrams and pictures
-\RequirePackage{pgfpages} % TikZ page manipulation, can break hyperlinks
-\RequirePackage{prooftrees} % Truth trees
-\RequirePackage{forest} % Trees
-\RequirePackage[all]{xy} % Diagrams (*breaks* when breqn enabled)
-\RequirePackage{tikz-cd} % Diagrams (like xy-pic but better)
+\iftoggle{earlygraphics}{
+\RequirePackage{pgfornament}
+  % Graphics
+  \RequirePackage{tikz} % General diagrams and pictures
+  \RequirePackage{pgfpages} % TikZ page manipulation, can break hyperlinks
+  \RequirePackage{prooftrees} % Truth trees
+  \RequirePackage{forest} % Trees
+  \RequirePackage[all]{xy} % Diagrams (*breaks* when breqn enabled)
+  \RequirePackage{tikz-cd} % Diagrams (like xy-pic but better)
+
+  \usepackage{pgfplots}
+  \pgfplotsset{compat=1.3}
+  \usepgfplotslibrary{fillbetween}
+
+}{
+  % \AtBeginDocument{nogf}
+}
 
 % Verbatim mode tools
 \RequirePackage{alltt} % Like "verbatim" but with commands enabled
 \RequirePackage{fancyvrb} % Enhanced "verbatim" modes
 \RequirePackage{upquote} % Normal single/double quotes in 
+
+
+
 
 
 % Tables
@@ -131,22 +150,17 @@
 }
 \makeatother
 
-% Plots
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.3}
-\usepgfplotslibrary{fillbetween}
-
-
 % Grammar
 \setlength{\grammarparsep}{20pt plus 1pt minus 1pt} % increase separation between rules
 \setlength{\grammarindent}{6em} % increase separation between LHS/RHS 
 
-% Bib;liography settings
+% Bibliography settings
 \ifearlybeamer
 \else
 \renewcommand{\mkdatezeros}{\mkyearzeros}
 \defbibheading{bibliography}[\refname]{\noindent\b{#1}}
 \fi
+
 
 
 \RequirePackage{antix-settings}
@@ -161,6 +175,11 @@
 \newcommand{\cna}{\autocite*} % Omit author
 \newcommand{\cnp}{\cite} % Omit parens
 \newcommand{\cnap}{\cite*} % Omit parens and author
+\providecommand{\shortcite}{}%
+\renewcommand{\shortcite}[1]{
+    \def\ONE{#1}
+    \expandafter\NewDocumentCommand\csname \ONE\endcsname { s m } {\IfBooleanTF{##1}{\cnp[##2]{#1}}{\ci[##2]{#1}}}
+}
 
 
 
@@ -200,7 +219,7 @@
 }
 \makeatother
 
-\RequirePackage{shortcuts}
+\RequirePackage{shortcuts-math}
 \RequirePackage{shortcuts-text}
 \RequirePackage{shortcuts-matrix}
 \RequirePackage{shortcuts-unicode}
@@ -209,21 +228,11 @@
 \newcolumntype{Q}{>{\displaystyle}l} % math-mode version of "l" column type
 \newcolumntype{R}{>{$}r<{$}} % math-mode version of "l" column type
 
-\iftoggle{earlythesis}{
-  \SetCiteCommand{\parencite}
-  \renewcommand{\mkbegdispquote}[2]{\citereset\openautoquote}
-  \renewcommand{\mkenddispquote}[2]{\closeautoquote#1#2}
 
-  \newcommand{\partbreak}{\clearpage}
-  
-  \renewcommand{\thepart}{\arabic{part}}
-  \titleformat{\part}[block]{\textbf{Part \thepart: }}{}{0pt}{\bfc}[]
-  \titlespacing{\part}{0pt}{0pt}{0pt}
-  \titleformat{\chapter}[block]{\textbf{\thepart.\thechapter.} }{}{0pt}{\b}
-  \counterwithin*{section}{chapter}
-  \titleformat{\section}[block]{\ul{\thepart.\thechapter.\thesection. }}{}{0pt}{\ul}
+\newcommand{\bfc}[1]{\filcenter\textbf{#1}} % \end{center}}
 
-}
+\newcommand{\lat}[1]{\textit{#1}}
+
 % Allow right-aligned cases in math mode
 % http://tex.stackexchange.com/questions/27520/
 \makeatletter
@@ -443,6 +452,16 @@
         \substitutefont{BCQ}{\rmdefault}{Tempora-TLF}
       }
     }
+    {oldtx}{
+      \usepackage{txfonts}
+            \renewcommand{\bfdefault}{b} % Fix log parsing issues
+      \renewcommand{\b}{\textbf}
+      \renewcommand{\i}{\textit}
+      \AtBeginDocument{
+        \substitutefont{LGR}{\rmdefault}{Tempora-TLF}
+        \substitutefont{BCQ}{\rmdefault}{Tempora-TLF}
+      }
+    }
     {lmr}{
       \AtBeginDocument{
         \fontfamily{lmr}\selectfont
@@ -563,7 +582,9 @@
 \AtEndOfClass{ % Configure csquotes; csquotes loaded late 
   \MakeOuterQuote{"}
   % \MakeAutoQuote{`}{'}
+  \iftoggle{earlygraphics}{
   \tikzset{every picture/.prefix code=\DisableQuotes} % Fix quotes in TikZ
+  }{}
 }
 \fi
 
@@ -637,16 +658,95 @@
 \renewcommand{\del}[1]{\left(#1\right)}
 \renewcommand{\ne}{\ensuremath{\neq}}
 
+\iftoggle{earlybeamer}{}{
+
 \titleformat{\part}[block]{}{}{0pt}{\textbf}[]
 \titlespacing{\part}{0pt}{0pt}{0pt}
+}
+
+
 \iftoggle{earlythesis}{
+  \newcommand{\partbreak}{\clearpage}
+
+  
+  % \AtEndOfClass{
+
+  % }
+
   \SetCiteCommand{\parencite}
   \renewcommand{\mkbegdispquote}[2]{\citereset\openautoquote}
   \renewcommand{\mkenddispquote}[2]{\closeautoquote#1#2}
-  \titleformat{\chapter}[block]{\textbf{\thechapter.} }{}{0pt}{\b}
-  \counterwithin*{section}{chapter}
-  \titleformat{\section}[block]{\ul{\thechapter.\thesection. }}{}{0pt}{\ul}
+
+
+\iftoggle{earlybeamer}{}{
+\renewcommand{\thepart}{\arabic{part}}
+  \renewcommand{\thechapter}{\arabic{chapter}}
+  \renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
+  \renewcommand{\thesubsection}{\arabic{chapter}.\arabic{section}.\arabic{subsection}}
+    \counterwithin*{section}{chapter}
+
+    \setheadrule{0.5pt}
+    \sethead{Jason Hansel}{Thesis}{\today}
+    \setfootrule{0.5pt}
+    \newcommand{\footsec}{%
+    \ifthenelse{%
+        \equal{\value{subsection}}{0}%
+      }{%
+        \ifthenelse{%
+          \equal{\value{section}}{0}%
+        }{%
+          \ifthenelse{%
+            \equal{\value{chapter}}{0}%
+          }{%
+            % nothing
+          }{%
+            §\thechapter%
+          }%
+        }{%
+          §\thesection%
+        }%
+      }{%
+        §\thesubsection%
+      }
+    }
+    
+    \geometry{headheight=15pt,headsep=10pt}
+  \titlecontents{chapter}[2.3em]{}{\contentslabel{2.3em}}{}{\titlerule*[1pc]{.}\contentspage}
+  \titlecontents{section}[4.6em]{}{\contentslabel{2.3em}}{}{\titlerule*[1pc]{.}\contentspage}
+  \titlecontents{subsection}[6.9em]{}{\contentslabel{2.3em}}{}{\titlerule*[1pc]{.}\contentspage}
+  % \newcommand{\chapterbreak}{\clearpage}
+  \titleformat{\chapter}[block]{\textbf{Chapter \thechapter: }}{}{0pt}{\bfc}[]
+  \titleformat{\section}[block]{\textbf{\thesection. } }{}{0pt}{\b}
+  \titleformat{\subsection}[block]{\ul{\thesubsection.  }}{}{0pt}{\ul}
+  \titlespacing{\chapter}{0pt}{0pt}{0pt}
 }
+}
+
+
+\makeatletter
+\renewcommand{\tableofcontents}{%
+  \null\hfill\textbf{\Large\contentsname}\hfill\null\par % line to comment if Glenn style also wanted here
+  \@starttoc{toc}%
+}
+\makeatother
+
+% \ct magic citation command
+\ExplSyntaxOn
+\seq_new:N \l_outer
+\seq_new:N \l_myseq
+\tl_new:N \l_left
+\tl_new:N \l_tokens
+\NewDocumentCommand{\ct}{m}{
+    \tl_clear:N \l_tokens
+    \seq_set_split:Nnn \l_outer{; }{#1}
+    \seq_map_inline:Nn \l_outer {
+        \seq_set_split:Nnn \l_myseq{~}{##1}
+        \seq_pop_left:NN \l_myseq \l_left 
+        \tl_put_right:Nx \l_tokens { [\seq_use:Nn \l_myseq{~}]{\l_left} }
+    }
+    \expandafter\autocites\l_tokens }
+\ExplSyntaxOff
+
 
 
 
